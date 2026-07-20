@@ -1,0 +1,37 @@
+{
+  "classes": [
+    "Alternaria_D",
+    "Botrytis Leaf Blight",
+    "Bulb Rot",
+    "Bulb_blight-D",
+    "Caterpillar-P",
+    "Downy mildew",
+    "Fusarium-D",
+    "Healthy leaves",
+    "Iris yellow virus_augment",
+    "Purple blotch",
+    "Rust",
+    "Virosis-D",
+    "Xanthomonas Leaf Blight",
+    "onion1",
+    "stemphylium Leaf Blight"
+  ],
+  "effnet": {
+    "accuracy": 0.9810379241516967,
+    "precision": 0.9811027303043838,
+    "recall": 0.9810379241516967,
+    "f1_score": 0.9807828187976038
+  },
+  "yolo_cls": {
+    "accuracy": 0.9725548902195609,
+    "precision": 0.9732387721663178,
+    "recall": 0.9725548902195609,
+    "f1_score": 0.9725065014406424
+  },
+  "ensemble": {
+    "accuracy": 0.9780439121756487,
+    "precision": 0.9783887285489351,
+    "recall": 0.9780439121756487,
+    "f1_score": 0.9779681458603741
+  }
+}

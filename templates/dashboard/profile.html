@@ -1,0 +1,113 @@
+{% extends "base/dashboard_base.html" %}
+
+{% block title %}Profile - FasalRehbar AI{% endblock %}
+
+{% block dashboard_content %}
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title mb-4">
+            <i class="fas fa-user"></i> My Profile
+        </h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="row g-4">
+                <div class="col-md-4 text-center">
+                    <div class="mb-3">
+                        {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" id="profileImage" class="rounded-circle shadow-sm" alt="Profile" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid white;">
+                        {% else %}
+                            <div class="rounded-circle shadow-sm d-flex align-items-center justify-content-center bg-success text-white mx-auto" style="width: 150px; height: 150px; font-size: 4rem; font-weight: bold; border: 3px solid white;">
+                                {{ user.first_name|slice:":1"|upper|default:user.username|slice:":1"|upper }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% if form.avatar %}
+                    <div class="mb-3">
+                        {{ form.avatar }}
+                        <small class="text-muted d-block mt-1">PNG, JPG, or GIF (max 5MB)</small>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-8">
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        {{ form.phone.label_tag }}
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                        <div class="text-danger small">{{ form.phone.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.farm_name.label_tag }}
+                        {{ form.farm_name }}
+                        {% if form.farm_name.errors %}
+                        <div class="text-danger small">{{ form.farm_name.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.location.label_tag }}
+                        {{ form.location }}
+                        {% if form.location.errors %}
+                        <div class="text-danger small">{{ form.location.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.bio.label_tag }}
+                        {{ form.bio }}
+                        {% if form.bio.errors %}
+                        <div class="text-danger small">{{ form.bio.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Changes
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <hr class="my-4">
+
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="mb-3">Account Information</h5>
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <p><strong>Username:</strong> {{ user.username }}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+                        <p><strong>Member Since:</strong> {{ user.date_joined|date:"d M Y" }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h5 class="mb-3">Security</h5>
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <p class="mb-3">
+                            <strong>Password:</strong> Protected
+                        </p>
+                        <a href="{% url 'accounts:password_change' %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-key me-2"></i>Change Password
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

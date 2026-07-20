@@ -1,0 +1,410 @@
+{% extends "base/dashboard_base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Disease Detection" %} — FasalRehbar AI{% endblock %}
+
+{% block dashboard_content %}
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="page-header-icon">
+        <i class="fas fa-microscope"></i>
+    </div>
+    <div class="page-header-text">
+        <h2>{% trans "Plant Disease Detection" %}</h2>
+        <p>{% trans "Upload a leaf image to identify diseases using AI" %}</p>
+    </div>
+</div>
+
+<div class="row g-4">
+
+    <!-- ── Upload Column ── -->
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="fw-bold mb-1" style="color: var(--gray-800);">
+                    <i class="fas fa-cloud-upload-alt me-2" style="color: var(--primary);"></i>
+                    {% trans "Upload Crop Image" %}
+                </h5>
+                <p class="small text-muted mb-4">{% trans "Supports PNG, JPG, JPEG — max 5MB" %}</p>
+
+                <form method="post" action="{% url 'detection:upload' %}" enctype="multipart/form-data" id="uploadForm">
+                    {% csrf_token %}
+
+                    <!-- Drop Zone -->
+                    <div class="upload-zone" id="dropZone" tabindex="0" role="button"
+                         aria-label="{% trans 'Click or drag to upload image' %}">
+                        {{ form.image }}
+
+                        <div id="uploadPlaceholder">
+                            <div class="upload-zone-icon">
+                                <i class="fas fa-image"></i>
+                            </div>
+                            <p class="fw-semibold mb-1" style="font-size: 1.05rem; color: var(--gray-700); position: relative; z-index: 1;">
+                                {% trans "Drag & drop your leaf image here" %}
+                            </p>
+                            <p class="small text-muted mb-3" style="position: relative; z-index: 1;">
+                                {% trans "or click to browse files" %}
+                            </p>
+                            <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; position: relative; z-index: 1;">
+                                <span class="badge badge-success"><i class="fas fa-leaf me-1"></i>Mango</span>
+                                <span class="badge badge-success"><i class="fas fa-leaf me-1"></i>Onion</span>
+                                <span class="badge badge-success"><i class="fas fa-leaf me-1"></i>Sugarcane</span>
+                            </div>
+                        </div>
+
+                        <!-- Image Preview (hidden until file selected) -->
+                        <div id="imagePreview" style="display: none; position: relative; z-index: 1;">
+                            <img id="previewImage" src="" alt="Preview"
+                                 style="max-height: 280px; max-width: 100%; object-fit: contain; border-radius: var(--radius-lg); margin-bottom: 1rem; box-shadow: var(--shadow-md);">
+                            <div id="previewInfo" style="font-size: 0.85rem; color: var(--gray-600); margin-bottom: 0.75rem;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Form Errors -->
+                    {% if form.image.errors %}
+                    <div class="alert alert-danger mt-2">
+                        <i class="fas fa-times-circle"></i>
+                        {{ form.image.errors.as_text }}
+                    </div>
+                    {% endif %}
+
+                    <!-- Action Buttons (visible after selection) -->
+                    <div id="uploadActions" style="display: none; margin-top: 1rem;">
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button type="submit" class="btn btn-primary btn-lg" style="flex: 1;" id="analyzeBtn">
+                                <i class="fas fa-wand-magic-sparkles"></i>
+                                {% trans "Analyze Image" %}
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" id="clearBtn">
+                                <i class="fas fa-xmark"></i>
+                                {% trans "Clear" %}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Process Steps -->
+        <div class="card mt-3">
+            <div class="card-body" style="padding: 1.25rem 1.75rem;">
+                <h6 class="fw-bold mb-3" style="color: var(--gray-700);">{% trans "What Happens Next" %}</h6>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    {% for step_icon, step_color, step_title, step_desc in steps %}
+                    <div style="display: flex; align-items: flex-start; gap: 12px;">
+                        <div style="width: 34px; height: 34px; border-radius: 50%; background: {{ step_color }}; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; color: white; margin-top: 1px;">
+                            <i class="fas {{ step_icon }}"></i>
+                        </div>
+                        <div>
+                            <p class="fw-semibold mb-0" style="font-size: 0.875rem; color: var(--gray-800);">{{ step_title }}</p>
+                            <p class="small text-muted mb-0">{{ step_desc }}</p>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <!-- Fallback static steps if context not provided -->
+                    <div style="display: flex; align-items: flex-start; gap: 12px;">
+                        <div style="width: 34px; height: 34px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; color: white;">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <div>
+                            <p class="fw-semibold mb-0" style="font-size: 0.875rem; color: var(--gray-800);">{% trans "Upload" %}</p>
+                            <p class="small text-muted mb-0">{% trans "Select a clear photo of the affected leaf" %}</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: 12px;">
+                        <div style="width: 34px; height: 34px; border-radius: 50%; background: var(--blue-500); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; color: white;">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div>
+                            <p class="fw-semibold mb-0" style="font-size: 0.875rem; color: var(--gray-800);">{% trans "Crop Classification" %}</p>
+                            <p class="small text-muted mb-0">{% trans "EfficientNet-B0 identifies your plant type" %}</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: 12px;">
+                        <div style="width: 34px; height: 34px; border-radius: 50%; background: var(--amber-500); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; color: white;">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <div>
+                            <p class="fw-semibold mb-0" style="font-size: 0.875rem; color: var(--gray-800);">{% trans "Disease Detection" %}</p>
+                            <p class="small text-muted mb-0">{% trans "EfficientNet + YOLOv8 ensemble detects any disease" %}</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: 12px;">
+                        <div style="width: 34px; height: 34px; border-radius: 50%; background: #7c3aed; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; color: white;">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div>
+                            <p class="fw-semibold mb-0" style="font-size: 0.875rem; color: var(--gray-800);">{% trans "AI Recommendations" %}</p>
+                            <p class="small text-muted mb-0">{% trans "RAG system generates personalized treatment advice" %}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Info Column ── -->
+    <div class="col-lg-5">
+        <!-- Tips Card -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3" style="color: var(--gray-800);">
+                    <i class="fas fa-circle-info me-2" style="color: var(--blue-500);"></i>
+                    {% trans "Tips for Best Results" %}
+                </h6>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+                    <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: var(--gray-700);">
+                        <i class="fas fa-check-circle mt-1" style="color: var(--primary); flex-shrink: 0;"></i>
+                        {% trans "Use good natural lighting — avoid shadows on the leaf" %}
+                    </li>
+                    <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: var(--gray-700);">
+                        <i class="fas fa-check-circle mt-1" style="color: var(--primary); flex-shrink: 0;"></i>
+                        {% trans "Make the affected area clearly visible in the frame" %}
+                    </li>
+                    <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: var(--gray-700);">
+                        <i class="fas fa-check-circle mt-1" style="color: var(--primary); flex-shrink: 0;"></i>
+                        {% trans "Avoid blurry or out-of-focus photos" %}
+                    </li>
+                    <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: var(--gray-700);">
+                        <i class="fas fa-check-circle mt-1" style="color: var(--primary); flex-shrink: 0;"></i>
+                        {% trans "A single leaf against a plain background works best" %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Supported Crops Card -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3" style="color: var(--gray-800);">
+                    <i class="fas fa-leaf me-2" style="color: var(--primary);"></i>
+                    {% trans "Supported Crops & Diseases" %}
+                </h6>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="padding: 0.75rem; background: var(--green-50); border-radius: var(--radius-md); border: 1px solid var(--green-100);">
+                        <div style="font-weight: 700; color: var(--primary); margin-bottom: 4px; font-size: 0.9rem;">
+                            <i class="fas fa-circle-dot me-1"></i> Mango
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--gray-600);">
+                            Anthracnose, Bacterial Canker, Die Back, Powdery Mildew, Sooty Mould + more
+                        </div>
+                    </div>
+                    <div style="padding: 0.75rem; background: #fef3c7; border-radius: var(--radius-md); border: 1px solid #fde68a;">
+                        <div style="font-weight: 700; color: #92400e; margin-bottom: 4px; font-size: 0.9rem;">
+                            <i class="fas fa-circle-dot me-1"></i> Onion
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--gray-600);">
+                            Bulb Blight, Leaf Blight, Purple Blotch, Stemphylium Blight + more
+                        </div>
+                    </div>
+                    <div style="padding: 0.75rem; background: #dbeafe; border-radius: var(--radius-md); border: 1px solid #bfdbfe;">
+                        <div style="font-weight: 700; color: #1e40af; margin-bottom: 4px; font-size: 0.9rem;">
+                            <i class="fas fa-circle-dot me-1"></i> Sugarcane
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--gray-600);">
+                            Bacterial Blight, Red Rot, Rust, Smut, Yellow Leaf Disease + more
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Model Info Card -->
+        <div class="card">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3" style="color: var(--gray-800);">
+                    <i class="fas fa-robot me-2" style="color: #7c3aed;"></i>
+                    {% trans "AI Models Used" %}
+                </h6>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex-shrink: 0;"></span>
+                        <span style="color: var(--gray-700);"><strong>EfficientNet-B0</strong> — Crop classification</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--amber-500); flex-shrink: 0;"></span>
+                        <span style="color: var(--gray-700);"><strong>EfficientNet-B0</strong> — Disease detection</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--blue-500); flex-shrink: 0;"></span>
+                        <span style="color: var(--gray-700);"><strong>YOLOv8s-cls</strong> — Disease classification</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 0.85rem;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #7c3aed; flex-shrink: 0;"></span>
+                        <span style="color: var(--gray-700);"><strong>RAG + LLM</strong> — Expert recommendations</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── Recent Scans ── -->
+{% if user.scan_images.exists %}
+<div class="mt-4">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <h5 class="fw-bold mb-0" style="color: var(--gray-800);">{% trans "Recent Scans" %}</h5>
+        <a href="{% url 'detection:history' %}" class="btn btn-outline-secondary btn-sm">
+            {% trans "View All" %} <i class="fas fa-arrow-right ms-1"></i>
+        </a>
+    </div>
+    <div class="row g-3">
+        {% for scan in user.scan_images.all|slice:":3" %}
+        <div class="col-md-4">
+            <div class="card" style="cursor: pointer;" onclick="{% if scan.prediction %}window.location='{% url 'detection:result' scan.prediction.id %}'{% endif %}">
+                <div style="height: 180px; overflow: hidden;">
+                    <img src="{{ scan.image.url }}" alt="Scan {{ forloop.counter }}"
+                         style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;">
+                </div>
+                <div class="card-body" style="padding: 0.875rem 1rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                        <span style="font-size: 0.75rem; color: var(--gray-500);">{{ scan.uploaded_at|date:"d M Y" }}</span>
+                        {% if scan.prediction %}
+                            {% if scan.prediction.is_healthy %}
+                            <span class="badge badge-success"><i class="fas fa-check me-1"></i>Healthy</span>
+                            {% else %}
+                            <span class="badge badge-danger" style="background: #fee2e2; color: #991b1b;"><i class="fas fa-bug me-1"></i>Disease</span>
+                            {% endif %}
+                        {% else %}
+                        <span class="badge" style="background: #fef3c7; color: #92400e;">Processing</span>
+                        {% endif %}
+                    </div>
+                    {% if scan.prediction %}
+                    <p style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin: 0;">
+                        {{ scan.prediction.crop.name|default:"Unknown" }} —
+                        {{ scan.prediction.disease.name|default:"Healthy" }}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const fileInput = document.getElementById('id_image');
+    const dropZone = document.getElementById('dropZone');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImage = document.getElementById('previewImage');
+    const previewInfo = document.getElementById('previewInfo');
+    const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+    const uploadActions = document.getElementById('uploadActions');
+    const clearBtn = document.getElementById('clearBtn');
+    const uploadForm = document.getElementById('uploadForm');
+
+    // ── Click to select ──────────────────────────────────────
+    dropZone.addEventListener('click', function (e) {
+        if (e.target !== clearBtn && !clearBtn.contains(e.target)) {
+            fileInput.click();
+        }
+    });
+
+    dropZone.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            fileInput.click();
+        }
+    });
+
+    // ── Drag and drop ────────────────────────────────────────
+    ['dragenter', 'dragover'].forEach(evt => {
+        dropZone.addEventListener(evt, e => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+    });
+
+    ['dragleave', 'drop'].forEach(evt => {
+        dropZone.addEventListener(evt, e => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+        });
+    });
+
+    dropZone.addEventListener('drop', function (e) {
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            handleFileSelect(files[0]);
+        }
+    });
+
+    // ── File input change ────────────────────────────────────
+    fileInput.addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+            handleFileSelect(this.files[0]);
+        }
+    });
+
+    function handleFileSelect(file) {
+        // Validate type — must match server-side ALLOWED_MIME_TYPES in detection/forms.py
+        const allowed = [
+            'image/png', 'image/jpeg', 'image/jpg',
+            'image/jfif', 'image/webp', 'image/pjpeg'
+        ];
+        if (file.type && !allowed.includes(file.type)) {
+            showError('{% trans "Only PNG, JPG, JPEG, JFIF, and WEBP images are allowed." %}');
+            return;
+        }
+        // Validate size (10 MB)
+        if (file.size > 10 * 1024 * 1024) {
+            showError('{% trans "File size must not exceed 10 MB." %}');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+            previewInfo.textContent = `${file.name} (${sizeMB} MB)`;
+
+            uploadPlaceholder.style.display = 'none';
+            imagePreview.style.display = 'block';
+            uploadActions.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function showError(msg) {
+        const existing = document.getElementById('uploadError');
+        if (existing) existing.remove();
+        const div = document.createElement('div');
+        div.id = 'uploadError';
+        div.className = 'alert alert-danger mt-2';
+        div.innerHTML = `<i class="fas fa-times-circle"></i> ${msg}`;
+        dropZone.after(div);
+    }
+
+    // ── Clear button ─────────────────────────────────────────
+    clearBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        fileInput.value = '';
+        previewImage.src = '';
+        imagePreview.style.display = 'none';
+        uploadPlaceholder.style.display = 'block';
+        uploadActions.style.display = 'none';
+        const err = document.getElementById('uploadError');
+        if (err) err.remove();
+    });
+
+    // ── Loading overlay on submit ────────────────────────────
+    uploadForm.addEventListener('submit', function (e) {
+        if (!fileInput.files || fileInput.files.length === 0) {
+            e.preventDefault();
+            showError('{% trans "Please select an image before analyzing." %}');
+            return;
+        }
+        showFasalRehbarLoading(
+            "{% trans 'Analyzing your crop image...' %}",
+            "{% trans 'Running AI classification and disease detection' %}"
+        );
+    });
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base/base.html" %}
+
+{% block title %}Services - FasalRehbar AI{% endblock %}
+
+{% block content %}
+<section class="container-lg section-padding">
+    <h1 class="section-title mb-5">Our <span class="highlight">Services</span></h1>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <i class="fas fa-magnifying-glass fa-2x mb-3" style="color: #2E7D32;"></i>
+                    <h5 class="card-title">Plant Disease Detection</h5>
+                    <p class="card-text">
+                        Upload images of your crops and get instant disease identification with high accuracy. 
+                        Our AI analyzes the image in seconds and provides a detailed diagnosis.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <i class="fas fa-heartbeat fa-2x mb-3" style="color: #2E7D32;"></i>
+                    <h5 class="card-title">Crop Health Monitoring</h5>
+                    <p class="card-text">
+                        Track your crop health over time with detailed history and analytics. 
+                        Get insights into disease patterns and seasonal trends.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <i class="fas fa-file-pdf fa-2x mb-3" style="color: #2E7D32;"></i>
+                    <h5 class="card-title">Disease Reports</h5>
+                    <p class="card-text">
+                        Generate comprehensive reports of your disease detections. 
+                        Download and share with agronomists or pest management experts.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <i class="fas fa-lightbulb fa-2x mb-3" style="color: #2E7D32;"></i>
+                    <h5 class="card-title">Expert Recommendations</h5>
+                    <p class="card-text">
+                        Get actionable treatment and prevention recommendations based on detected diseases. 
+                        Includes both organic and chemical solutions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5 text-center">
+        <h3 class="mb-3">Coming Soon</h3>
+        <p class="lead mb-4">Future features powered by AI</p>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="badge bg-light text-dark py-2 px-3" style="font-size: 1rem;">
+                    <i class="fas fa-calendar me-2"></i>Crop Calendar
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="badge bg-light text-dark py-2 px-3" style="font-size: 1rem;">
+                    <i class="fas fa-chart-line me-2"></i>Yield Prediction
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="badge bg-light text-dark py-2 px-3" style="font-size: 1rem;">
+                    <i class="fas fa-map me-2"></i>Pest Mapping
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="badge bg-light text-dark py-2 px-3" style="font-size: 1rem;">
+                    <i class="fas fa-cloud me-2"></i>Weather Integration
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

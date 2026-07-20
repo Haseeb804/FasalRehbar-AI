@@ -1,0 +1,28 @@
+{
+  "accuracy": 1.0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1_score": 1.0,
+  "classes": [
+    "Mango",
+    "Onion",
+    "Sugarcane"
+  ],
+  "confusion_matrix": [
+    [
+      600,
+      0,
+      0
+    ],
+    [
+      0,
+      1984,
+      0
+    ],
+    [
+      0,
+      0,
+      2988
+    ]
+  ]
+}

@@ -1,0 +1,304 @@
+{% extends "base/dashboard_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Detection Result" %} — FasalRehbar AI{% endblock %}
+
+{% block extra_css %}
+<style>
+.confidence-bar-fill.high   { background: linear-gradient(90deg, var(--primary), var(--primary-light)); }
+.confidence-bar-fill.medium { background: linear-gradient(90deg, var(--amber-500), #fcd34d); }
+.confidence-bar-fill.low    { background: linear-gradient(90deg, var(--blue-500), #60a5fa); }
+
+.model-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.625rem 0.875rem;
+    border-radius: var(--radius-md);
+    background: var(--gray-50);
+    border: 1px solid var(--border);
+    font-size: 0.875rem;
+}
+.model-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+.scan-img-wrapper {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    background: var(--gray-100);
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.scan-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 0.875rem;
+}
+.info-row:last-child { border-bottom: none; }
+.info-label { color: var(--gray-500); font-weight: 500; }
+.info-value { color: var(--gray-800); font-weight: 600; }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="page-header-icon" style="background: linear-gradient(135deg, #16a34a, #22c55e);">
+        <i class="fas fa-chart-bar"></i>
+    </div>
+    <div class="page-header-text">
+        <h2>{% trans "Analysis Result" %}</h2>
+        <p>{% trans "AI-powered disease detection complete" %}</p>
+    </div>
+</div>
+
+<!-- ── Uncertainty Warning ── -->
+{% if prediction.is_uncertain %}
+<div class="alert alert-warning mb-3" style="border-radius: var(--radius-lg);">
+    <i class="fas fa-circle-question"></i>
+    <div>
+        <strong>{% trans "Models disagreed on this prediction" %}</strong><br>
+        <span style="font-size: 0.875rem;">
+            {% blocktrans with a=prediction.effnet_top_label b=prediction.yolo_top_label %}
+            EfficientNet suggests "{{ a }}" while YOLOv8 suggests "{{ b }}".
+            Treat this as uncertain and consult a local agricultural expert.
+            {% endblocktrans %}
+        </span>
+    </div>
+</div>
+{% endif %}
+
+<div class="row g-4">
+
+    <!-- ── Left: Image + Meta ── -->
+    <div class="col-lg-5">
+
+        <!-- Uploaded Image -->
+        <div class="card mb-3">
+            <div class="card-body" style="padding: 1.25rem;">
+                <h6 class="fw-bold mb-2" style="color: var(--gray-700);">{% trans "Uploaded Image" %}</h6>
+                <div class="scan-img-wrapper mb-3">
+                    <img src="{{ prediction.scan_image.image.url }}" alt="{% trans 'Scanned leaf image' %}">
+                </div>
+
+                <!-- Meta Info -->
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-seedling me-1" style="color: var(--primary);"></i> {% trans "Crop" %}</span>
+                    <span class="info-value">{{ details.crop|default:"—" }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-clock me-1" style="color: var(--gray-400);"></i> {% trans "Scan Time" %}</span>
+                    <span class="info-value">{{ details.processing_time }}s</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-calendar me-1" style="color: var(--gray-400);"></i> {% trans "Date" %}</span>
+                    <span class="info-value">{{ prediction.predicted_at|date:"d M Y, H:i" }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grad-CAM Visual -->
+        {% if prediction.analysis_image %}
+        <div class="card">
+            <div class="card-body" style="padding: 1.25rem;">
+                <h6 class="fw-bold mb-1" style="color: var(--gray-700);">
+                    <i class="fas fa-eye me-2" style="color: var(--blue-500);"></i>{% trans "Visual Diagnosis" %}
+                </h6>
+                <p style="font-size: 0.78rem; color: var(--gray-500); margin-bottom: 10px;">
+                    {% trans "Left: original | Center: AI attention | Right: approximate affected area" %}
+                </p>
+                <img src="{{ prediction.analysis_image.url }}" class="img-fluid rounded" alt="{% trans 'Grad-CAM analysis' %}" style="border-radius: var(--radius-md);">
+                <div class="alert alert-light mt-2" style="font-size: 0.78rem; padding: 0.6rem 0.875rem;">
+                    <i class="fas fa-circle-info me-1"></i>
+                    {% trans "This shows where the AI focused — not a precise lesion boundary." %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- ── Right: Results ── -->
+    <div class="col-lg-7">
+
+        <!-- Disease Status Card -->
+        <div class="card mb-3">
+            <div class="card-body">
+                {% if prediction.is_healthy %}
+                <div class="result-status-healthy">
+                    <div class="result-status-icon" style="background: #bbf7d0; color: #166534;">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div>
+                        <h4 style="font-weight: 800; color: #166534; margin-bottom: 4px;">{% trans "Healthy Plant Detected!" %}</h4>
+                        <p style="color: #16a34a; margin: 0; font-size: 0.9rem;">
+                            {% trans "Your crop appears to be in good health. Continue regular monitoring and maintenance." %}
+                        </p>
+                    </div>
+                </div>
+                {% elif prediction.is_uncertain %}
+                <div class="result-status-uncertain">
+                    <div class="result-status-icon" style="background: #fde68a; color: #92400e;">
+                        <i class="fas fa-circle-question"></i>
+                    </div>
+                    <div>
+                        <h4 style="font-weight: 800; color: #92400e; margin-bottom: 4px;">{{ details.disease }}</h4>
+                        <p style="color: #b45309; margin: 0; font-size: 0.9rem;">
+                            {% trans "Uncertain diagnosis — two models disagreed. Expert consultation recommended." %}
+                        </p>
+                    </div>
+                </div>
+                {% else %}
+                <div class="result-status-disease">
+                    <div class="result-status-icon" style="background: #fecaca; color: #991b1b;">
+                        <i class="fas fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        <h4 style="font-weight: 800; color: #991b1b; margin-bottom: 4px;">{{ details.disease }}</h4>
+                        <p style="color: #dc2626; margin: 0; font-size: 0.9rem;">
+                            {% trans "Disease detected. Review the recommendations below for treatment guidance." %}
+                        </p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Confidence Score Card -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h6 class="fw-bold mb-0" style="color: var(--gray-700);">{% trans "Confidence Score" %}</h6>
+                    <span class="model-badge
+                        {% if prediction.confidence_level == 'high' %}
+                            " style="background: var(--green-100); color: var(--green-800);">
+                            <i class="fas fa-arrow-up"></i> {{ details.confidence_score }}% High
+                        {% elif prediction.confidence_level == 'medium' %}
+                            " style="background: #fef3c7; color: #92400e;">
+                            <i class="fas fa-minus"></i> {{ details.confidence_score }}% Medium
+                        {% else %}
+                            " style="background: #dbeafe; color: #1e40af;">
+                            <i class="fas fa-arrow-down"></i> {{ details.confidence_score }}% Low
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="confidence-bar-wrapper" style="height: 14px;">
+                    <div class="confidence-bar-fill {{ prediction.confidence_level }}"
+                         style="width: 0%; height: 100%;"
+                         data-target="{{ details.confidence_score }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Model Breakdown -->
+        {% if prediction.effnet_top_label or prediction.yolo_top_label %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3" style="color: var(--gray-700);">
+                    <i class="fas fa-robot me-2" style="color: #7c3aed;"></i>{% trans "Model Breakdown" %}
+                </h6>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    {% if prediction.effnet_top_label %}
+                    <div class="model-row">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="model-badge" style="background: var(--green-50); color: var(--green-800);">EffNet-B0</span>
+                            <span style="color: var(--gray-700); font-weight: 500;">{{ prediction.effnet_top_label }}</span>
+                        </div>
+                        <span style="font-weight: 700; color: var(--primary);">{{ details.effnet_top_confidence }}%</span>
+                    </div>
+                    {% endif %}
+                    {% if prediction.yolo_top_label %}
+                    <div class="model-row">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="model-badge" style="background: #dbeafe; color: #1e40af;">YOLOv8</span>
+                            <span style="color: var(--gray-700); font-weight: 500;">{{ prediction.yolo_top_label }}</span>
+                        </div>
+                        <span style="font-weight: 700; color: var(--blue-500);">{{ details.yolo_top_confidence }}%</span>
+                    </div>
+                    {% endif %}
+                    {% if prediction.effnet_top_label and prediction.yolo_top_label %}
+                    <div style="font-size: 0.78rem; color: var(--gray-500); padding: 4px 8px;">
+                        {% if prediction.is_uncertain %}
+                        <i class="fas fa-triangle-exclamation text-warning me-1"></i>
+                        {% trans "Models disagreed — ensemble result shown above as final decision." %}
+                        {% else %}
+                        <i class="fas fa-check-circle text-success me-1"></i>
+                        {% trans "Both models agree — high confidence ensemble result." %}
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Disease Info (if diseased) -->
+        {% if details.disease and not prediction.is_healthy and details.disease_description %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3" style="color: var(--gray-700);">
+                    <i class="fas fa-circle-info me-2" style="color: var(--blue-500);"></i>{% trans "Disease Information" %}
+                </h6>
+                {% if details.disease_description %}
+                <p style="font-size: 0.875rem; color: var(--gray-700); margin-bottom: 12px;">{{ details.disease_description }}</p>
+                {% endif %}
+                {% if details.symptoms %}
+                <div style="background: var(--gray-50); border-radius: var(--radius-md); padding: 0.75rem; font-size: 0.875rem; color: var(--gray-700);">
+                    <strong style="color: var(--gray-800);">{% trans "Symptoms" %}:</strong><br>
+                    {{ details.symptoms }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Action Buttons -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <a href="{% url 'recommendation:detail' prediction.id %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-lightbulb"></i>
+                {% trans "View Full AI Recommendations" %}
+            </a>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                {% if not prediction.is_healthy %}
+                <a href="{% url 'history:list' %}" class="btn btn-outline-secondary" style="flex: 1;">
+                    <i class="fas fa-clock-rotate-left"></i> {% trans "View History" %}
+                </a>
+                {% endif %}
+                <a href="{% url 'detection:index' %}" class="btn btn-outline-secondary" style="flex: 1;">
+                    <i class="fas fa-plus"></i> {% trans "New Scan" %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Animate confidence bar on page load
+document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(() => {
+        document.querySelectorAll('.confidence-bar-fill[data-target]').forEach(bar => {
+            bar.style.width = bar.dataset.target + '%';
+        });
+    }, 300);
+});
+</script>
+
+{% endblock %}

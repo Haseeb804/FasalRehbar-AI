@@ -1,0 +1,179 @@
+{% extends "base/dashboard_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Dashboard" %} — FasalRehbar AI{% endblock %}
+
+{% block dashboard_content %}
+
+<!-- Welcome Row -->
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px;">
+    <div>
+        <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--gray-900); margin-bottom: 2px;">
+            {% trans "Welcome back" %}, {{ user.first_name|default:user.username }}! 👋
+        </h2>
+        <p style="color: var(--gray-500); font-size: 0.875rem; margin: 0;">
+            {% trans "Here's a summary of your crop disease detection activity." %}
+        </p>
+    </div>
+    <a href="{% url 'detection:index' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> {% trans "New Scan" %}
+    </a>
+</div>
+
+<!-- Stats Grid -->
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+    <div class="stat-card">
+        <div class="stat-icon green"><i class="fas fa-images"></i></div>
+        <div>
+            <div class="stat-value">{{ total_scans }}</div>
+            <div class="stat-label">{% trans "Total Scans" %}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon green"><i class="fas fa-leaf"></i></div>
+        <div>
+            <div class="stat-value">{{ healthy_count }}</div>
+            <div class="stat-label">{% trans "Healthy Plants" %}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon red"><i class="fas fa-virus"></i></div>
+        <div>
+            <div class="stat-value">{{ disease_count }}</div>
+            <div class="stat-label">{% trans "Diseases Found" %}</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon amber"><i class="fas fa-bolt"></i></div>
+        <div>
+            <div class="stat-value">{{ high_confidence_count }}</div>
+            <div class="stat-label">{% trans "High Confidence" %}</div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h6 class="fw-bold mb-3" style="color: var(--gray-700);">
+            <i class="fas fa-zap me-2" style="color: var(--primary);"></i>{% trans "Quick Actions" %}
+        </h6>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+            <a href="{% url 'detection:index' %}" class="btn btn-primary">
+                <i class="fas fa-microscope"></i> {% trans "Detect Disease" %}
+            </a>
+            <a href="{% url 'history:list' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-clock-rotate-left"></i> {% trans "Scan History" %}
+            </a>
+            <a href="{% url 'dashboard:profile' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-user"></i> {% trans "My Profile" %}
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Scans Table -->
+{% if recent_scans %}
+<div class="card">
+    <div class="card-body" style="padding: 0;">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border);">
+            <h6 class="fw-bold mb-0" style="color: var(--gray-800);">
+                <i class="fas fa-clock-rotate-left me-2" style="color: var(--primary);"></i>{% trans "Recent Scans" %}
+            </h6>
+            <a href="{% url 'history:list' %}" class="btn btn-outline-secondary btn-sm">
+                {% trans "View All" %} <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="table" style="margin: 0;">
+                <thead>
+                    <tr>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Crop" %}</th>
+                        <th>{% trans "Result" %}</th>
+                        <th>{% trans "Confidence" %}</th>
+                        <th>{% trans "Action" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for scan in recent_scans %}
+                    <tr>
+                        <td style="color: var(--gray-500); font-size: 0.85rem;">
+                            {{ scan.predicted_at|date:"d M Y, H:i" }}
+                        </td>
+                        <td>
+                            {% if scan.crop %}
+                            <span style="font-weight: 600; color: var(--gray-700);">{{ scan.crop.name }}</span>
+                            {% else %}
+                            <span style="color: var(--gray-400);">—</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if scan.is_healthy %}
+                            <span class="badge badge-success"><i class="fas fa-check me-1"></i>{% trans "Healthy" %}</span>
+                            {% elif scan.is_uncertain %}
+                            <span class="badge" style="background: #fef3c7; color: #92400e;">
+                                <i class="fas fa-question me-1"></i>{% trans "Uncertain" %}
+                            </span>
+                            {% elif scan.disease %}
+                            <span class="badge" style="background: #fee2e2; color: #991b1b;">
+                                <i class="fas fa-bug me-1"></i>{{ scan.disease.name|truncatechars:22 }}
+                            </span>
+                            {% else %}
+                            <span class="badge" style="background: var(--gray-100); color: var(--gray-500);">{% trans "Processing" %}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div class="confidence-bar-wrapper" style="width: 60px; height: 6px; flex-shrink: 0;">
+                                    <div class="confidence-bar-fill {{ scan.confidence_level }}"
+                                         style="width: {{ scan.get_confidence_percentage }}%; height: 100%;">
+                                    </div>
+                                </div>
+                                <span style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700);">
+                                    {{ scan.get_confidence_percentage }}%
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="{% url 'detection:result' scan.id %}"
+                               class="btn btn-outline-secondary btn-sm">
+                                {% trans "View" %} <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<!-- Empty state -->
+<div class="card">
+    <div class="card-body text-center" style="padding: 3rem 2rem;">
+        <div style="width: 72px; height: 72px; background: var(--green-50); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.75rem; color: var(--primary);">
+            <i class="fas fa-seedling"></i>
+        </div>
+        <h5 style="font-weight: 700; color: var(--gray-700); margin-bottom: 8px;">{% trans "No scans yet" %}</h5>
+        <p style="color: var(--gray-500); margin-bottom: 1.5rem; font-size: 0.9rem;">
+            {% trans "Upload your first crop image to get started with AI disease detection." %}
+        </p>
+        <a href="{% url 'detection:index' %}" class="btn btn-primary">
+            <i class="fas fa-microscope"></i> {% trans "Start First Scan" %}
+        </a>
+    </div>
+</div>
+{% endif %}
+
+<style>
+@media (max-width: 768px) {
+    .stat-card { padding: 1rem; }
+    div[style*="grid-template-columns: repeat(4"] { grid-template-columns: repeat(2, 1fr); }
+    div[style*="grid-template-columns: repeat(3, 1fr)"] { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+    div[style*="grid-template-columns: repeat(4"] { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,28 @@
+{
+  "classes": [
+    "BacterialBlights",
+    "Healthy",
+    "Mosaic",
+    "RedRot",
+    "Rust",
+    "Yellow"
+  ],
+  "effnet": {
+    "accuracy": 0.9715528781793842,
+    "precision": 0.9717871412042149,
+    "recall": 0.9715528781793842,
+    "f1_score": 0.9715439528330979
+  },
+  "yolo_cls": {
+    "accuracy": 0.9678714859437751,
+    "precision": 0.967990695097511,
+    "recall": 0.9678714859437751,
+    "f1_score": 0.9678758556100544
+  },
+  "ensemble": {
+    "accuracy": 0.9745649263721553,
+    "precision": 0.9746111801654999,
+    "recall": 0.9745649263721553,
+    "f1_score": 0.9745442003576646
+  }
+}

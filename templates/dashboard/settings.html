@@ -1,0 +1,123 @@
+{% extends "base/dashboard_base.html" %}
+
+{% block title %}Settings - FasalRehbar AI{% endblock %}
+
+{% block dashboard_content %}
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title mb-4">
+            <i class="fas fa-cog"></i> Settings
+        </h2>
+
+        <div class="row g-4">
+            <!-- Preferences -->
+            <div class="col-md-6">
+                <h5 class="mb-3">Preferences</h5>
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                            <label class="form-check-label" for="emailNotifications">
+                                Email Notifications
+                            </label>
+                            <small class="d-block text-muted mt-1">Receive updates about your scans</small>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="weeklyReport" checked>
+                            <label class="form-check-label" for="weeklyReport">
+                                Weekly Report
+                            </label>
+                            <small class="d-block text-muted mt-1">Get weekly summary of your predictions</small>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="marketing">
+                            <label class="form-check-label" for="marketing">
+                                Marketing Emails
+                            </label>
+                            <small class="d-block text-muted mt-1">Receive news and updates</small>
+                        </div>
+
+                        <button class="btn btn-primary btn-sm mt-3">Save Preferences</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy -->
+            <div class="col-md-6">
+                <h5 class="mb-3">Privacy</h5>
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="profilePublic">
+                            <label class="form-check-label" for="profilePublic">
+                                Public Profile
+                            </label>
+                            <small class="d-block text-muted mt-1">Allow others to view your profile</small>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="shareData">
+                            <label class="form-check-label" for="shareData">
+                                Share Data for Research
+                            </label>
+                            <small class="d-block text-muted mt-1">Help us improve our models</small>
+                        </div>
+
+                        <a href="{% url 'core:privacy' %}" class="btn btn-link btn-sm ps-0">View Privacy Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Danger Zone -->
+        <h5 class="text-danger mb-3">Danger Zone</h5>
+        <div class="card border-danger">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h6 class="mb-1">Delete Account</h6>
+                        <p class="text-muted mb-0">This action cannot be undone. All your data will be permanently deleted.</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                            Delete Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header border-danger">
+                <h5 class="modal-title text-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Delete Account
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete your account? This action is permanent and cannot be undone.</p>
+                <p class="text-danger fw-bold">All your data will be deleted including:</p>
+                <ul>
+                    <li>Profile information</li>
+                    <li>Scan history</li>
+                    <li>Predictions</li>
+                    <li>Recommendations</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger">Delete My Account</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

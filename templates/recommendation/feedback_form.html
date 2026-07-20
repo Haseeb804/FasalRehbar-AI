@@ -1,0 +1,81 @@
+{% extends "base/dashboard_base.html" %}
+{% load i18n %}
+
+{% block title %}Submit Feedback - FasalRehbar AI{% endblock %}
+
+{% block dashboard_content %}
+<div class="card fade-in">
+    <div class="card-body" style="padding: 2.5rem;">
+        <h2 class="card-title mb-4">
+            <i class="fas fa-comment-dots text-primary"></i> {% trans "Submit Feedback" %}
+        </h2>
+        
+        <p class="text-muted mb-4">
+            We value your feedback. Let us know how FasalRehbar AI's recommendation for <strong>{{ recommendation.prediction.crop.name }}</strong> ({{ recommendation.disease.name }}) worked for you.
+        </p>
+
+        <form method="post" class="needs-validation">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    <p class="mb-0">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="mb-4">
+                <label class="form-label fw-bold">{{ form.feedback_type.label }}</label>
+                <div class="d-flex gap-4">
+                    {% for radio in form.feedback_type %}
+                    <div class="form-check">
+                        {{ radio.tag }}
+                        <label class="form-check-label" for="{{ radio.id_for_label }}">
+                            {{ radio.choice_label }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if form.feedback_type.errors %}
+                <div class="text-danger small mt-1">{{ form.feedback_type.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold">{{ form.rating.label }}</label>
+                <div class="d-flex gap-3 align-items-center" style="font-size: 1.5rem;">
+                    {% for radio in form.rating %}
+                    <div class="form-check p-0 m-0">
+                        {{ radio.tag }}
+                        <label class="form-check-label m-0 text-warning" for="{{ radio.id_for_label }}" style="cursor: pointer;">
+                            {{ radio.choice_label }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if form.rating.errors %}
+                <div class="text-danger small mt-1">{{ form.rating.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold">{{ form.comment.label }}</label>
+                {{ form.comment }}
+                {% if form.comment.errors %}
+                <div class="text-danger small mt-1">{{ form.comment.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="d-flex gap-3 mt-5">
+                <button type="submit" class="btn btn-primary" style="border-radius: var(--radius-full); padding: 0.75rem 2rem;">
+                    <i class="fas fa-paper-plane me-2"></i> Submit Feedback
+                </button>
+                <a href="{% url 'recommendation:detail' recommendation.prediction.id %}" class="btn btn-outline-secondary" style="border-radius: var(--radius-full); padding: 0.75rem 2rem;">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,366 @@
+{% extends "base/dashboard_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Scan History" %} — FasalRehbar AI{% endblock %}
+
+{% block extra_css %}
+<style>
+.history-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+.history-card:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    transform: translateY(-2px);
+}
+.history-thumb {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    background: var(--gray-100);
+    display: block;
+}
+.history-thumb-placeholder {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(135deg, var(--gray-100), var(--gray-50));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-300);
+    font-size: 2rem;
+}
+.history-body {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.history-actions {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 6px;
+    background: var(--gray-50);
+}
+.delete-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+.delete-modal-overlay.active { display: flex; }
+.delete-modal {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 24px 64px rgba(0,0,0,.2);
+    animation: fadeSlideUp 0.2s ease-out;
+}
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="page-header-icon" style="background: linear-gradient(135deg, #0f766e, #14b8a6);">
+        <i class="fas fa-clock-rotate-left"></i>
+    </div>
+    <div class="page-header-text">
+        <h2>{% trans "Scan History" %}</h2>
+        <p>
+            {% if total_count %}
+            {{ total_count }} {% trans "scan" %}{{ total_count|pluralize }} {% trans "in your history" %}
+            {% else %}
+            {% trans "Your complete plant disease detection history" %}
+            {% endif %}
+        </p>
+    </div>
+    <a href="{% url 'detection:index' %}" class="btn btn-primary ms-auto">
+        <i class="fas fa-plus"></i> {% trans "New Scan" %}
+    </a>
+</div>
+
+<!-- ── Filters ── -->
+<div class="card mb-3">
+    <div class="card-body" style="padding: 1rem 1.25rem;">
+        <form method="get" id="filterForm">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto; gap: 10px; align-items: end;">
+                <div>
+                    <label style="font-size: 0.75rem; font-weight: 600; color: var(--gray-500); margin-bottom: 4px; display: block;">{% trans "Search" %}</label>
+                    <input type="text" name="search" class="form-control form-control-sm"
+                           placeholder="{% trans 'Search notes or tags…' %}"
+                           value="{{ request.GET.search }}">
+                </div>
+                <div>
+                    <label style="font-size: 0.75rem; font-weight: 600; color: var(--gray-500); margin-bottom: 4px; display: block;">{% trans "Crop" %}</label>
+                    <select name="crop" class="form-select form-select-sm">
+                        <option value="">{% trans "All Crops" %}</option>
+                        <option value="Mango" {% if request.GET.crop == "Mango" %}selected{% endif %}>{% trans "Mango" %}</option>
+                        <option value="Onion" {% if request.GET.crop == "Onion" %}selected{% endif %}>{% trans "Onion" %}</option>
+                        <option value="Sugarcane" {% if request.GET.crop == "Sugarcane" %}selected{% endif %}>{% trans "Sugarcane" %}</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 0.75rem; font-weight: 600; color: var(--gray-500); margin-bottom: 4px; display: block;">{% trans "Confidence" %}</label>
+                    <select name="confidence" class="form-select form-select-sm">
+                        <option value="">{% trans "All Levels" %}</option>
+                        <option value="high" {% if request.GET.confidence == "high" %}selected{% endif %}>{% trans "High" %}</option>
+                        <option value="medium" {% if request.GET.confidence == "medium" %}selected{% endif %}>{% trans "Medium" %}</option>
+                        <option value="low" {% if request.GET.confidence == "low" %}selected{% endif %}>{% trans "Low" %}</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 0.75rem; font-weight: 600; color: var(--gray-500); margin-bottom: 4px; display: block;">{% trans "Disease" %}</label>
+                    <input type="text" name="disease" class="form-control form-control-sm"
+                           placeholder="{% trans 'e.g. Anthracnose' %}"
+                           value="{{ request.GET.disease }}">
+                </div>
+                <div style="display: flex; gap: 6px;">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                    <a href="{% url 'history:list' %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-xmark"></i>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ── History Grid ── -->
+{% if histories %}
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+    {% for history in histories %}
+    <div class="history-card fade-in">
+        <!-- Thumbnail -->
+        {% if history.prediction.scan_image.image %}
+        <img src="{{ history.prediction.scan_image.image.url }}"
+             alt="{% trans 'Crop scan' %}" class="history-thumb">
+        {% else %}
+        <div class="history-thumb-placeholder">
+            <i class="fas fa-image"></i>
+        </div>
+        {% endif %}
+
+        <!-- Body -->
+        <div class="history-body">
+            <!-- Date & Crop -->
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 0.75rem; color: var(--gray-400);">
+                    <i class="fas fa-calendar me-1"></i>
+                    {{ history.prediction.predicted_at|date:"d M Y" }}
+                </span>
+                {% if history.prediction.crop %}
+                <span style="font-size: 0.72rem; background: var(--green-50); color: var(--primary); padding: 2px 8px; border-radius: 20px; font-weight: 600;">
+                    {{ history.prediction.crop.name }}
+                </span>
+                {% endif %}
+            </div>
+
+            <!-- Disease Badge -->
+            <div>
+                {% if history.prediction.is_healthy %}
+                <span class="badge badge-success">
+                    <i class="fas fa-check-circle me-1"></i>{% trans "Healthy" %}
+                </span>
+                {% elif history.prediction.disease %}
+                <span class="badge" style="background: #fee2e2; color: #991b1b; font-size: 0.8rem; padding: 4px 10px;">
+                    <i class="fas fa-bug me-1"></i>{{ history.prediction.disease.name|truncatechars:28 }}
+                </span>
+                {% else %}
+                <span class="badge" style="background: var(--gray-100); color: var(--gray-500);">
+                    {% trans "Unknown" %}
+                </span>
+                {% endif %}
+            </div>
+
+            <!-- Confidence Bar -->
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                <div class="confidence-bar-wrapper" style="flex: 1; height: 5px;">
+                    <div class="confidence-bar-fill {{ history.prediction.confidence_level }}"
+                         style="width: {{ history.prediction.get_confidence_percentage }}%; height: 100%;">
+                    </div>
+                </div>
+                <span style="font-size: 0.78rem; font-weight: 700; color: var(--gray-600); flex-shrink: 0;">
+                    {{ history.prediction.get_confidence_percentage }}%
+                </span>
+            </div>
+
+            <!-- Tags -->
+            {% if history.tags %}
+            <div style="margin-top: 2px;">
+                {% for tag in history.tags.split %}
+                <span style="font-size: 0.7rem; background: var(--gray-100); color: var(--gray-600); padding: 2px 7px; border-radius: 20px; display: inline-block; margin: 1px;">
+                    {{ tag }}
+                </span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="history-actions">
+            <a href="{% url 'detection:result' history.prediction.id %}"
+               class="btn btn-primary btn-sm" style="flex: 1; text-align: center;">
+                <i class="fas fa-chart-bar me-1"></i>{% trans "Result" %}
+            </a>
+            {% if history.prediction.recommendation %}
+            <a href="{% url 'recommendation:detail' history.prediction.id %}"
+               class="btn btn-outline-secondary btn-sm" style="flex: 1; text-align: center;">
+                <i class="fas fa-lightbulb me-1"></i>{% trans "Advice" %}
+            </a>
+            {% endif %}
+            <button type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    title="{% trans 'Delete' %}"
+                    onclick="confirmDelete({{ history.id }}, '{{ history.prediction.predicted_at|date:'d M Y' }}')">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- ── Pagination ── -->
+{% if is_paginated %}
+<nav style="display: flex; justify-content: center; gap: 6px;">
+    {% if page_obj.has_previous %}
+    <a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+       class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-angles-left"></i>
+    </a>
+    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+       class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-angle-left"></i>
+    </a>
+    {% endif %}
+
+    <span class="btn btn-primary btn-sm" style="pointer-events: none;">
+        {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+       class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-angle-right"></i>
+    </a>
+    <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}"
+       class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-angles-right"></i>
+    </a>
+    {% endif %}
+</nav>
+{% endif %}
+
+{% else %}
+<!-- Empty State -->
+<div class="card">
+    <div class="card-body text-center" style="padding: 4rem 2rem;">
+        <div style="width: 80px; height: 80px; background: var(--green-50); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2rem; color: var(--primary);">
+            <i class="fas fa-clock-rotate-left"></i>
+        </div>
+        <h5 style="font-weight: 700; color: var(--gray-700); margin-bottom: 8px;">
+            {% if request.GET.search or request.GET.crop or request.GET.confidence %}
+            {% trans "No scans match your filters" %}
+            {% else %}
+            {% trans "No scan history yet" %}
+            {% endif %}
+        </h5>
+        <p style="color: var(--gray-500); margin-bottom: 1.5rem; font-size: 0.9rem;">
+            {% if request.GET.search or request.GET.crop or request.GET.confidence %}
+            {% trans "Try clearing the filters to see all your scans." %}
+            {% else %}
+            {% trans "Upload a crop image to start building your disease detection history." %}
+            {% endif %}
+        </p>
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            {% if request.GET.search or request.GET.crop or request.GET.confidence %}
+            <a href="{% url 'history:list' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-xmark"></i> {% trans "Clear Filters" %}
+            </a>
+            {% endif %}
+            <a href="{% url 'detection:index' %}" class="btn btn-primary">
+                <i class="fas fa-microscope"></i> {% trans "Start First Scan" %}
+            </a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- ── Delete Confirmation Modal ── -->
+<div class="delete-modal-overlay" id="deleteModal" role="dialog" aria-modal="true">
+    <div class="delete-modal">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+            <div style="width: 44px; height: 44px; background: #fee2e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--red-500); font-size: 1.1rem; flex-shrink: 0;">
+                <i class="fas fa-trash"></i>
+            </div>
+            <div>
+                <h5 style="font-weight: 700; margin: 0; color: var(--gray-900);">{% trans "Delete Scan?" %}</h5>
+                <p style="margin: 0; font-size: 0.85rem; color: var(--gray-500);" id="deleteModalDate"></p>
+            </div>
+        </div>
+        <p style="color: var(--gray-600); font-size: 0.9rem; margin-bottom: 1.5rem;">
+            {% trans "This will permanently delete the scan image, detection result, and any recommendations. This action cannot be undone." %}
+        </p>
+        <form method="post" id="deleteForm">
+            {% csrf_token %}
+            <div style="display: flex; gap: 10px;">
+                <button type="button" onclick="closeDeleteModal()"
+                        class="btn btn-outline-secondary" style="flex: 1;">
+                    {% trans "Cancel" %}
+                </button>
+                <button type="submit" class="btn btn-sm"
+                        style="flex: 1; background: var(--red-500); color: white; border: none; padding: 0.625rem 1rem; border-radius: var(--radius-md); font-weight: 600;">
+                    <i class="fas fa-trash me-1"></i> {% trans "Delete" %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function confirmDelete(historyId, dateStr) {
+    document.getElementById('deleteForm').action = '/history/' + historyId + '/delete/';
+    document.getElementById('deleteModalDate').textContent = dateStr;
+    document.getElementById('deleteModal').classList.add('active');
+}
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.remove('active');
+}
+document.getElementById('deleteModal').addEventListener('click', function(e) {
+    if (e.target === this) closeDeleteModal();
+});
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeDeleteModal();
+});
+</script>
+
+<style>
+@media (max-width: 900px) {
+    div[style*="grid-template-columns: repeat(3, 1fr)"] { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px) {
+    div[style*="grid-template-columns: repeat(3, 1fr)"] { grid-template-columns: 1fr; }
+    div[style*="grid-template-columns: repeat(3, 1fr)"] ~ * { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+    div[style*="grid-template-columns: 1fr 1fr 1fr 1fr auto"] {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+</style>
+{% endblock %}
