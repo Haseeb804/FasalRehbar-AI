@@ -1,6 +1,7 @@
-# PakAgri
+# FasalRehbar AI
+**Live Website:** [https://fasalrehbar-ai.onrender.com](https://fasalrehbar-ai.onrender.com)
 
-PakAgri is a production-ready agricultural disease detection platform built with Django, Django REST Framework, Bootstrap 5, and a service-oriented architecture designed for future AI model integration.
+FasalRehbar AI is a production-ready agricultural disease detection platform built with Django, Django REST Framework, Bootstrap 5, and a service-oriented architecture designed for future AI model integration.
 
 ## Features
 
