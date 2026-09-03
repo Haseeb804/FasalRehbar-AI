@@ -68,8 +68,8 @@ def predict_crop(image_path: str):
     """
     Returns (crop_name: str, confidence: float) or (None, 0.0).
 
-    Uses EfficientNet-B0 only — single model, simple softmax classification
-    over the three crop classes [Mango, Onion, Sugarcane].
+    Uses EfficientNet-B0 with multi-model joint candidate verification when
+    confidence is close, over the three crop classes [Mango, Onion, Sugarcane].
     """
     registry = get_registry()
     if registry.crop_classifier is None:
@@ -81,10 +81,36 @@ def predict_crop(image_path: str):
         probs = F.softmax(registry.crop_classifier(tensor), dim=1).cpu().numpy()[0]
 
     idx = int(probs.argmax())
-    crop_name = registry.crop_classes[idx]
-    confidence = float(probs[idx])
-    logger.info("Crop classified as '%s' (%.1f%%)", crop_name, confidence * 100)
-    return crop_name, confidence
+    top_crop = registry.crop_classes[idx]
+    top_conf = float(probs[idx])
+
+    if top_conf >= 0.85:
+        logger.info("Crop classified as '%s' (%.1f%%)", top_crop, top_conf * 100)
+        return top_crop, top_conf
+
+    logger.info("Crop classifier uncertain (top: %s %.1f%%) — evaluating candidate signals", top_crop, top_conf * 100)
+    best_crop = top_crop
+    best_score = top_conf
+
+    for c_idx, crop in enumerate(registry.crop_classes):
+        c_prob = float(probs[c_idx])
+        if c_prob < 0.08:
+            continue
+        mset = registry.disease_models.get(crop)
+        yolo_conf = 0.0
+        if mset and mset.yolo_model:
+            try:
+                y_res = mset.yolo_model.predict(source=image_path, verbose=False)[0]
+                yolo_conf = float(y_res.probs.top1conf)
+            except Exception:
+                pass
+        joint_score = 0.55 * c_prob + 0.45 * yolo_conf
+        if joint_score > best_score:
+            best_score = joint_score
+            best_crop = crop
+
+    logger.info("Crop final decision: '%s' (joint score: %.3f)", best_crop, best_score)
+    return best_crop, top_conf
 
 
 # ─────────────────────────────────────────────────────────

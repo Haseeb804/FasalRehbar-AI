@@ -40,8 +40,9 @@ def upload_image(request):
 
     logger.info("User %s uploaded scan %s", request.user.username, scan_image.id)
 
+    selected_crop = form.cleaned_data.get("crop_type", "auto")
     service = get_detection_service()
-    prediction = service.process_scan(scan_image)
+    prediction = service.process_scan(scan_image, selected_crop=selected_crop)
 
     if prediction:
         messages.success(

@@ -1,86 +1,202 @@
 {% extends "base/base.html" %}
+{% load static i18n %}
 
-{% block title %}Services - FasalRehbar AI{% endblock %}
+{% block title %}{% trans "AI Agricultural Services" %} — FasalRehbar AI{% endblock %}
 
 {% block content %}
-<section class="container-lg section-padding">
-    <h1 class="section-title mb-5">Our <span class="highlight">Services</span></h1>
+<!-- ══════════════════════════════════════════════════════════════
+     1. SERVICES HERO HEADER
+══════════════════════════════════════════════════════════════ -->
+<section class="hero-master" style="padding: 4.5rem 0 5rem;">
+    <img src="{% static 'images/hero_agri_bg.jpg' %}" alt="AI Services" class="hero-backdrop-img">
+    <div class="hero-overlay-gradient"></div>
 
-    <div class="row g-4">
-        <div class="col-md-6">
-            <div class="card h-100">
-                <div class="card-body">
-                    <i class="fas fa-magnifying-glass fa-2x mb-3" style="color: #2E7D32;"></i>
-                    <h5 class="card-title">Plant Disease Detection</h5>
-                    <p class="card-text">
-                        Upload images of your crops and get instant disease identification with high accuracy. 
-                        Our AI analyzes the image in seconds and provides a detailed diagnosis.
+    <div class="container-lg position-relative z-2 text-center max-w-800 mx-auto">
+        <div class="hero-pill-badge mb-3">
+            <i class="fas fa-stars text-emerald-300"></i>
+            <span>{% trans "Core Intelligence Capabilities" %}</span>
+        </div>
+        <h1 class="hero-title mb-3">
+            {% trans "AI-Powered Precision Agriculture Services" %}
+        </h1>
+        <p class="hero-subtitle mb-4 mx-auto">
+            {% trans "Advanced computer vision, neural classification, and evidence-grounded agronomic advisory tailored for Pakistani farmers." %}
+        </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'detection:index' %}" class="btn-hero-primary">
+                <i class="fas fa-camera"></i> {% trans "Scan Your Crop Leaf" %}
+            </a>
+            <a href="#crop-services" class="btn-hero-secondary">
+                <i class="fas fa-layer-group"></i> {% trans "View Crop Solutions" %}
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     2. FOUR CORE SERVICE CAPABILITIES
+══════════════════════════════════════════════════════════════ -->
+<section style="padding: 5.5rem 0; background: var(--white);">
+    <div class="container-lg">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-bold text-uppercase">
+                <i class="fas fa-microchip me-1"></i> {% trans "Features & Modules" %}
+            </span>
+            <h2 class="display-6 fw-bold text-slate-900 mt-2 mb-3">
+                {% trans "Full-Spectrum Crop Health Intelligence" %}
+            </h2>
+            <p class="text-muted" style="line-height: 1.8;">
+                {% trans "Engineered to deliver rapid, accurate diagnostic support from image upload to on-field chemical and cultural action plans." %}
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Service 1 -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="background: var(--slate-50); border: 1px solid var(--border-light) !important;">
+                    <div class="step-icon-box mb-3">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h5 class="fw-bold text-slate-900 mb-2">{% trans "Crop Identification" %}</h5>
+                    <p class="small text-muted mb-0" style="line-height: 1.65;">
+                        {% trans "Instant classification automatically detects whether your plant is Onion, Mango, or Sugarcane." %}
                     </p>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card h-100">
-                <div class="card-body">
-                    <i class="fas fa-heartbeat fa-2x mb-3" style="color: #2E7D32;"></i>
-                    <h5 class="card-title">Crop Health Monitoring</h5>
-                    <p class="card-text">
-                        Track your crop health over time with detailed history and analytics. 
-                        Get insights into disease patterns and seasonal trends.
+
+            <!-- Service 2 -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="background: var(--slate-50); border: 1px solid var(--border-light) !important;">
+                    <div class="step-icon-box mb-3" style="background: var(--rose-100); color: var(--rose-600);">
+                        <i class="fas fa-shield-virus"></i>
+                    </div>
+                    <h5 class="fw-bold text-slate-900 mb-2">{% trans "Disease Diagnosis" %}</h5>
+                    <p class="small text-muted mb-0" style="line-height: 1.65;">
+                        {% trans "High-accuracy detection checks plant leaves across 29 known agricultural pathogen classes." %}
                     </p>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card h-100">
-                <div class="card-body">
-                    <i class="fas fa-file-pdf fa-2x mb-3" style="color: #2E7D32;"></i>
-                    <h5 class="card-title">Disease Reports</h5>
-                    <p class="card-text">
-                        Generate comprehensive reports of your disease detections. 
-                        Download and share with agronomists or pest management experts.
+
+            <!-- Service 3 -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="background: var(--slate-50); border: 1px solid var(--border-light) !important;">
+                    <div class="step-icon-box mb-3" style="background: var(--sky-100); color: var(--sky-600);">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h5 class="fw-bold text-slate-900 mb-2">{% trans "Symptom Visual Heatmaps" %}</h5>
+                    <p class="small text-muted mb-0" style="line-height: 1.65;">
+                        {% trans "Visual color overlays highlight the exact infected spots on the leaf to confirm symptoms." %}
                     </p>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card h-100">
-                <div class="card-body">
-                    <i class="fas fa-lightbulb fa-2x mb-3" style="color: #2E7D32;"></i>
-                    <h5 class="card-title">Expert Recommendations</h5>
-                    <p class="card-text">
-                        Get actionable treatment and prevention recommendations based on detected diseases. 
-                        Includes both organic and chemical solutions.
+
+            <!-- Service 4 -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="background: var(--slate-50); border: 1px solid var(--border-light) !important;">
+                    <div class="step-icon-box mb-3" style="background: var(--violet-100); color: var(--violet-600);">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h5 class="fw-bold text-slate-900 mb-2">{% trans "7-Day Recovery Plans" %}</h5>
+                    <p class="small text-muted mb-0" style="line-height: 1.65;">
+                        {% trans "Receive structured day-by-day care instructions, safe spray guides, and irrigation advice." %}
                     </p>
                 </div>
             </div>
         </div>
     </div>
+</section>
 
-    <div class="mt-5 text-center">
-        <h3 class="mb-3">Coming Soon</h3>
-        <p class="lead mb-4">Future features powered by AI</p>
-        <div class="row g-3">
-            <div class="col-md-3">
-                <div class="badge bg-light text-dark py-2 px-3" style="font-size: 1rem;">
-                    <i class="fas fa-calendar me-2"></i>Crop Calendar
+<!-- ══════════════════════════════════════════════════════════════
+     3. CROP SERVICES VISUAL SHOWCASE
+══════════════════════════════════════════════════════════════ -->
+<section id="crop-services" style="padding: 5.5rem 0; background: var(--bg-main); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+    <div class="container-lg">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-bold text-uppercase">
+                <i class="fas fa-seedling me-1"></i> {% trans "Specialized Crop Diagnostics" %}
+            </span>
+            <h2 class="display-6 fw-bold text-slate-900 mt-2 mb-3">
+                {% trans "Target Crop Intelligence Solutions" %}
+            </h2>
+            <p class="text-muted" style="line-height: 1.8;">
+                {% trans "Dedicated diagnostic engines calibrated for Pakistan's regional agro-climatic conditions." %}
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Crop 1: Onion -->
+            <div class="col-lg-4">
+                <div class="crop-intel-card h-100">
+                    <div class="crop-card-media">
+                        <img src="{% static 'images/onion_showcase.jpg' %}" alt="Onion Crop" class="crop-card-img">
+                        <span class="crop-card-badge"><i class="fas fa-layer-group me-1"></i> 6 Classes</span>
+                    </div>
+                    <div class="crop-card-body">
+                        <h4 class="crop-card-title">🧅 {% trans "Onion Intelligence" %}</h4>
+                        <p class="crop-card-desc">
+                            {% trans "Foliar health monitoring and bulb rot prevention. Covers Purple Blotch, Downy Mildew, and Stemphylium Blight." %}
+                        </p>
+                        <a href="{% url 'detection:index' %}" class="btn-crop-action mt-auto">
+                            <i class="fas fa-camera me-1"></i> {% trans "Scan Onion Leaf" %}
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="badge bg-light text-dark py-2 px-3" style="font-size: 1rem;">
-                    <i class="fas fa-chart-line me-2"></i>Yield Prediction
+
+            <!-- Crop 2: Mango -->
+            <div class="col-lg-4">
+                <div class="crop-intel-card h-100">
+                    <div class="crop-card-media">
+                        <img src="{% static 'images/mango_showcase.jpg' %}" alt="Mango Crop" class="crop-card-img">
+                        <span class="crop-card-badge"><i class="fas fa-layer-group me-1"></i> 8 Classes</span>
+                    </div>
+                    <div class="crop-card-body">
+                        <h4 class="crop-card-title">🥭 {% trans "Mango Intelligence" %}</h4>
+                        <p class="crop-card-desc">
+                            {% trans "Orchard canopy health and blossom protection. Covers Anthracnose, Quick Decline, Powdery Mildew, and Canker." %}
+                        </p>
+                        <a href="{% url 'detection:index' %}" class="btn-crop-action mt-auto">
+                            <i class="fas fa-camera me-1"></i> {% trans "Scan Mango Leaf" %}
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="badge bg-light text-dark py-2 px-3" style="font-size: 1rem;">
-                    <i class="fas fa-map me-2"></i>Pest Mapping
+
+            <!-- Crop 3: Sugarcane -->
+            <div class="col-lg-4">
+                <div class="crop-intel-card h-100">
+                    <div class="crop-card-media">
+                        <img src="{% static 'images/sugarcane_showcase.jpg' %}" alt="Sugarcane Crop" class="crop-card-img">
+                        <span class="crop-card-badge"><i class="fas fa-layer-group me-1"></i> 6 Classes</span>
+                    </div>
+                    <div class="crop-card-body">
+                        <h4 class="crop-card-title">🌱 {% trans "Sugarcane Intelligence" %}</h4>
+                        <p class="crop-card-desc">
+                            {% trans "Cane health and sucrose protection. Covers Red Rot ('cane cancer'), Mosaic Virus, Bacterial Blight, and Rust." %}
+                        </p>
+                        <a href="{% url 'detection:index' %}" class="btn-crop-action mt-auto">
+                            <i class="fas fa-camera me-1"></i> {% trans "Scan Sugarcane Leaf" %}
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="badge bg-light text-dark py-2 px-3" style="font-size: 1rem;">
-                    <i class="fas fa-cloud me-2"></i>Weather Integration
-                </div>
-            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     4. CTA BANNER
+══════════════════════════════════════════════════════════════ -->
+<section style="padding: 4.5rem 0; background: var(--white);">
+    <div class="container-lg">
+        <div class="p-5 rounded-4 text-center text-white shadow-lg" style="background: linear-gradient(135deg, var(--emerald-950) 0%, var(--emerald-800) 50%, var(--emerald-700) 100%);">
+            <h2 class="fw-bold text-white mb-2">{% trans "Experience AI Crop Protection Today" %}</h2>
+            <p class="text-emerald-100 mb-4 max-w-600 mx-auto" style="line-height: 1.8;">
+                {% trans "Upload a leaf photo and receive evidence-based diagnosis in seconds." %}
+            </p>
+            <a href="{% url 'detection:index' %}" class="btn btn-hero-primary px-5 py-3">
+                <i class="fas fa-camera me-2"></i> {% trans "Start a New Scan" %}
+            </a>
         </div>
     </div>
 </section>

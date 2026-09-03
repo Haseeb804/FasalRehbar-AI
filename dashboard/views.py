@@ -22,13 +22,20 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         disease_count = predictions.exclude(disease__isnull=True).count()
         high_confidence_count = predictions.filter(confidence_level="high").count()
         
+        onion_count = predictions.filter(crop__name__iexact="Onion").count()
+        mango_count = predictions.filter(crop__name__iexact="Mango").count()
+        sugarcane_count = predictions.filter(crop__name__iexact="Sugarcane").count()
+
         context.update(
             {
                 "total_scans": predictions.count(),
                 "healthy_count": healthy_count,
                 "disease_count": disease_count,
                 "high_confidence_count": high_confidence_count,
-                "recent_scans": predictions.order_by("-predicted_at")[:5],
+                "onion_count": onion_count,
+                "mango_count": mango_count,
+                "sugarcane_count": sugarcane_count,
+                "recent_scans": predictions.order_by("-predicted_at")[:8],
                 "profile": getattr(user, "profile", None),
             }
         )

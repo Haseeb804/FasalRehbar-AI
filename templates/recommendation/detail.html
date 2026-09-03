@@ -1,454 +1,559 @@
-{% extends "base/dashboard_base.html" %}
-{% load i18n %}
+{% extends "base/base.html" %}
+{% load static i18n %}
 
-{% block title %}{% trans "AI Recommendations" %} — FasalRehbar AI{% endblock %}
-
-{% block extra_css %}
-<style>
-.advice-section { display: none; }
-.advice-section.active { display: block; animation: fadeSlideUp 0.3s ease-out; }
-
-.rec-hero {
-    background: linear-gradient(135deg, var(--green-900), var(--primary));
-    border-radius: var(--radius-xl);
-    padding: 1.75rem;
-    color: white;
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    margin-bottom: 1.5rem;
-    position: relative;
-    overflow: hidden;
-}
-.rec-hero::after {
-    content: '';
-    position: absolute;
-    right: -20px;
-    top: -20px;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: rgba(255,255,255,.07);
-}
-.rec-hero-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: var(--radius-lg);
-    background: rgba(255,255,255,.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    flex-shrink: 0;
-    backdrop-filter: blur(8px);
-}
-
-.urgency-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 0.375rem 1rem;
-    border-radius: var(--radius-full);
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-}
-
-.star-rating { display: flex; gap: 4px; }
-.star-btn {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--gray-300);
-    transition: color 0.15s, transform 0.15s;
-    padding: 2px;
-    line-height: 1;
-}
-.star-btn:hover, .star-btn.active { color: var(--amber-500); transform: scale(1.2); }
-</style>
+{% block title %}
+{% if is_urdu %}
+    فصل کی صحت اور اے آئی زرعی سفارشات — FasalRehbar AI
+{% else %}
+    Crop Health & AI Recommendations — FasalRehbar AI
+{% endif %}
 {% endblock %}
 
-{% block dashboard_content %}
+{% block content %}
+<div class="container-lg py-5">
 
-<!-- Page Header -->
-<div class="page-header">
-    <div class="page-header-icon" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
-        <i class="fas fa-lightbulb"></i>
-    </div>
-    <div class="page-header-text">
-        <h2>{% trans "AI Recommendations" %}</h2>
-        <p>{% trans "Expert guidance powered by Retrieval-Augmented Generation" %}</p>
-    </div>
-</div>
-
-{% if recommendation %}
-
-<!-- ── AI Limitation Notice (when fallback) ── -->
-{% if recommendation.ai_generation_error %}
-<div class="alert alert-info mb-3">
-    <i class="fas fa-circle-info"></i>
-    <span>{% trans "Showing knowledge-base guidance directly — AI language model unavailable right now." %}</span>
-</div>
-{% endif %}
-
-<!-- ── Hero Summary Card ── -->
-<div class="rec-hero fade-in">
-    <div class="rec-hero-icon">
-        {% if prediction.is_healthy %}
-        <i class="fas fa-leaf"></i>
-        {% else %}
-        <i class="fas fa-flask"></i>
-        {% endif %}
-    </div>
-    <div style="flex: 1; position: relative; z-index: 1;">
-        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px;">
-            <h4 style="font-weight: 800; margin: 0; font-size: 1.15rem;">
-                {{ prediction.crop.name }} —
-                {% if prediction.is_healthy %}{% trans "Healthy Plant" %}{% else %}{{ prediction.disease.name|default:advice.summary|truncatechars:40 }}{% endif %}
-            </h4>
-            <!-- Urgency Badge -->
-            {% if recommendation.urgency == "urgent" %}
-            <span class="urgency-pill" style="background: rgba(239,68,68,.25); color: #fca5a5; border: 1px solid rgba(239,68,68,.3);">
-                <i class="fas fa-exclamation-triangle"></i> {% trans "Urgent Action" %}
-            </span>
-            {% elif recommendation.urgency == "moderate" %}
-            <span class="urgency-pill" style="background: rgba(245,158,11,.2); color: #fcd34d; border: 1px solid rgba(245,158,11,.3);">
-                <i class="fas fa-exclamation-circle"></i> {% trans "Moderate" %}
-            </span>
-            {% elif recommendation.urgency == "normal" %}
-            <span class="urgency-pill" style="background: rgba(255,255,255,.15); color: rgba(255,255,255,.9); border: 1px solid rgba(255,255,255,.2);">
-                <i class="fas fa-eye"></i> {% trans "Monitor" %}
-            </span>
-            {% else %}
-            <span class="urgency-pill" style="background: rgba(34,197,94,.25); color: #86efac; border: 1px solid rgba(34,197,94,.3);">
-                <i class="fas fa-check-circle"></i> {% trans "Healthy" %}
-            </span>
-            {% endif %}
-        </div>
-
-        {% if advice.summary %}
-        <p style="margin: 0; font-size: 0.9rem; opacity: 0.92; line-height: 1.6;">{{ advice.summary }}</p>
-        {% endif %}
-
-        <div style="margin-top: 10px; font-size: 0.78rem; opacity: 0.75; display: flex; gap: 16px; flex-wrap: wrap;">
-            <span><i class="fas fa-seedling me-1"></i>{{ prediction.crop.name }}</span>
-            <span><i class="fas fa-gauge-high me-1"></i>{{ prediction.get_confidence_percentage }}% {% trans "confidence" %}</span>
-            <span><i class="fas fa-calendar me-1"></i>{{ prediction.predicted_at|date:"d M Y" }}</span>
-        </div>
-    </div>
-    <a href="{% url 'detection:result' prediction.id %}"
-       style="flex-shrink: 0; background: rgba(255,255,255,.15); color: white; border: 1px solid rgba(255,255,255,.3); padding: 0.5rem 1rem; border-radius: var(--radius-md); font-size: 0.8rem; font-weight: 600; text-decoration: none; backdrop-filter: blur(8px); display: flex; align-items: center; gap: 6px; position: relative; z-index: 1; transition: background 0.2s;">
-        <i class="fas fa-arrow-left"></i> {% trans "Detection" %}
-    </a>
-</div>
-
-<!-- ── Tab Navigation ── -->
-<div class="tab-nav mb-0" id="recTabNav" role="tablist">
-    <button class="tab-btn active" data-tab="overview" role="tab" aria-selected="true">
-        <i class="fas fa-circle-info me-1"></i> {% trans "Overview" %}
-    </button>
-    {% if not prediction.is_healthy %}
-    <button class="tab-btn" data-tab="treatment" role="tab">
-        <i class="fas fa-flask me-1"></i> {% trans "Treatment" %}
-    </button>
-    <button class="tab-btn" data-tab="prevention" role="tab">
-        <i class="fas fa-shield-halved me-1"></i> {% trans "Prevention" %}
-    </button>
-    {% endif %}
-    <button class="tab-btn" data-tab="expert" role="tab">
-        <i class="fas fa-user-doctor me-1"></i> {% trans "Expert Advice" %}
-    </button>
-</div>
-
-<!-- ── Tab: Overview ── -->
-<div class="advice-section active" id="tab-overview">
-    <div class="row g-3 mt-0" style="margin-top: 0 !important;">
-        {% if advice.symptoms %}
-        <div class="col-md-6">
-            <div class="advice-card h-100">
-                <div class="advice-card-header" style="color: var(--gray-800);">
-                    <div class="advice-icon blue"><i class="fas fa-magnifying-glass"></i></div>
-                    {% trans "Symptoms" %}
+    <!-- ══════════════════════════════════════════════════════════════
+         EXECUTIVE ADVISORY HEADER
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="result-header-hero mb-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill small fw-bold mb-2 shadow-sm" style="background: #ffffff !important; color: #022c22 !important; border: 1px solid #a7f3d0;">
+                    <i class="fas fa-wand-magic-sparkles" style="color: #059669;"></i>
+                    {% if is_urdu %}
+                        تیسرا مرحلہ — مستند زرعی ماہرین کی تیار کردہ اے آئی سفارشات
+                    {% else %}
+                        Stage 3 — Evidence-Grounded Agronomic Advisory
+                    {% endif %}
                 </div>
-                <div class="advice-card-body">{{ advice.symptoms }}</div>
-            </div>
-        </div>
-        {% endif %}
-        {% if advice.causes %}
-        <div class="col-md-6">
-            <div class="advice-card h-100">
-                <div class="advice-card-header" style="color: var(--gray-800);">
-                    <div class="advice-icon red"><i class="fas fa-bacteria"></i></div>
-                    {% trans "Causes" %}
-                </div>
-                <div class="advice-card-body">{{ advice.causes }}</div>
-            </div>
-        </div>
-        {% endif %}
-        {% if advice.severity_note %}
-        <div class="col-12">
-            <div class="advice-card">
-                <div class="advice-card-header" style="color: var(--gray-800);">
-                    <div class="advice-icon amber"><i class="fas fa-gauge-high"></i></div>
-                    {% trans "Severity Assessment" %}
-                </div>
-                <div class="advice-card-body">{{ advice.severity_note }}</div>
-            </div>
-        </div>
-        {% endif %}
-        {% if not advice.symptoms and not advice.causes %}
-        <div class="col-12">
-            <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i>
-                {% trans "Your plant appears healthy! No disease symptoms or causes to report." %}
-            </div>
-        </div>
-        {% endif %}
-    </div>
-</div>
 
-<!-- ── Tab: Treatment ── -->
-{% if not prediction.is_healthy %}
-<div class="advice-section" id="tab-treatment">
-    <div class="row g-3 mt-0">
-        {% if advice.organic_treatment %}
-        <div class="col-md-6">
-            <div class="advice-card h-100">
-                <div class="advice-card-header" style="color: var(--green-800);">
-                    <div class="advice-icon green"><i class="fas fa-leaf"></i></div>
-                    {% trans "Organic Treatment" %}
-                </div>
-                <div class="advice-card-body">{{ advice.organic_treatment }}</div>
-            </div>
-        </div>
-        {% endif %}
-        {% if advice.chemical_treatment %}
-        <div class="col-md-6">
-            <div class="advice-card h-100">
-                <div class="advice-card-header" style="color: #92400e;">
-                    <div class="advice-icon amber"><i class="fas fa-flask"></i></div>
-                    {% trans "Chemical Treatment" %}
-                </div>
-                <div class="advice-card-body">{{ advice.chemical_treatment }}</div>
-            </div>
-        </div>
-        {% endif %}
-        {% if not advice.organic_treatment and not advice.chemical_treatment %}
-        <div class="col-12">
-            <div class="alert alert-info">
-                <i class="fas fa-circle-info"></i>
-                {% trans "Treatment details will be available once the disease knowledge base is updated for this condition." %}
-            </div>
-        </div>
-        {% endif %}
-    </div>
-    <!-- Disclaimer -->
-    <div class="alert alert-warning mt-3" style="font-size: 0.82rem;">
-        <i class="fas fa-triangle-exclamation"></i>
-        <span>{% trans "Always consult a certified agricultural officer before applying pesticides or fertilizers. Dosages vary by region and crop stage." %}</span>
-    </div>
-</div>
+                <h2 class="fw-bold text-white mb-1">
+                    {% if is_urdu %}
+                        {{ prediction.crop.name }} —
+                        {% if prediction.is_healthy %}
+                            <span class="text-emerald-300">صحت مند فصل کی رہنمائی</span>
+                        {% else %}
+                            <span class="text-rose-300">{{ ur_advice.summary|default:prediction.disease.name }}</span>
+                        {% endif %}
+                    {% else %}
+                        {{ prediction.crop.name }} —
+                        {% if prediction.is_healthy %}
+                            <span class="text-emerald-300">Healthy Crop Advisory</span>
+                        {% else %}
+                            <span class="text-rose-300">{{ en_advice.summary|default:prediction.disease.name }}</span>
+                        {% endif %}
+                    {% endif %}
+                </h2>
 
-<!-- ── Tab: Prevention ── -->
-<div class="advice-section" id="tab-prevention">
-    <div class="row g-3 mt-0">
-        {% if advice.prevention %}
-        <div class="col-12">
-            <div class="advice-card">
-                <div class="advice-card-header" style="color: var(--gray-800);">
-                    <div class="advice-icon teal"><i class="fas fa-shield-halved"></i></div>
-                    {% trans "Prevention Strategies" %}
+                <div class="d-flex align-items-center gap-3 text-emerald-100 small flex-wrap">
+                    <span><i class="fas fa-microscope me-1"></i> {{ prediction.confidence_score|floatformat:1 }}% {% if is_urdu %}درستی کا تناسب{% else %}Confidence{% endif %}</span>
+                    <span><i class="fas fa-leaf me-1"></i> {% if is_urdu %}{{ ur_advice.growth_stage }}{% else %}{{ en_advice.growth_stage }}{% endif %}</span>
+                    <span><i class="fas fa-calendar me-1"></i> {{ prediction.predicted_at|date:"d M Y" }}</span>
                 </div>
-                <div class="advice-card-body">{{ advice.prevention }}</div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <a href="{% url 'detection:result' prediction.id %}" class="btn btn-outline-light rounded-pill px-3">
+                    <i class="fas fa-arrow-left me-1"></i> {% if is_urdu %}تشخیص پر واپس جائیں{% else %}Back to Diagnosis{% endif %}
+                </a>
+                <a href="{% url 'detection:index' %}" class="btn btn-light rounded-pill fw-bold text-emerald-900 px-3">
+                    <i class="fas fa-camera me-1"></i> {% if is_urdu %}نیا اسکین{% else %}New Scan{% endif %}
+                </a>
             </div>
         </div>
-        {% else %}
-        <div class="col-12">
-            <div class="alert alert-info">
-                <i class="fas fa-circle-info"></i>
-                {% trans "Prevention details are not yet available for this disease in our knowledge base." %}
-            </div>
+    </div>
+
+
+    {% if is_urdu %}
+    <!-- ══════════════════════════════════════════════════════════════
+         URDU ONLY MODE (When Urdu is selected)
+    ══════════════════════════════════════════════════════════════ -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" dir="rtl" style="font-family: var(--font-urdu);">
+        <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-4">
+            <h3 class="fw-bold text-slate-900 mb-0">
+                <i class="fas fa-seedling text-emerald-600 ms-2"></i>اے آئی زرعی سفارشات (اردو)
+            </h3>
+            <span class="badge bg-emerald-100 text-emerald-800 px-3 py-2 rounded-pill fs-6">مستند زرعی رہنما اصول</span>
         </div>
-        {% endif %}
-        <!-- General Best Practices -->
-        <div class="col-12">
-            <div class="card" style="border: 1px solid var(--border);">
-                <div class="card-body">
-                    <h6 class="fw-bold mb-3" style="color: var(--gray-800);">
-                        <i class="fas fa-lightbulb me-2" style="color: var(--primary);"></i>
-                        {% trans "General Best Practices" %}
-                    </h6>
-                    <div class="row g-2">
-                        {% for tip in best_practices %}
-                        <div class="col-md-6">
-                            <div style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.875rem; padding: 6px 0;">
-                                <i class="fas fa-check-circle mt-1" style="color: var(--primary); flex-shrink: 0;"></i>
-                                <span style="color: var(--gray-700);">{{ tip }}</span>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <!-- What this means -->
+                <div class="p-3 rounded-3 mb-4" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                    <h5 class="fw-bold text-slate-900 mb-2">
+                        <i class="fas fa-circle-info text-emerald-600 ms-2"></i>اس تشخیص کا آپ کی فصل کے لیے کیا مطلب ہے؟
+                    </h5>
+                    <p class="text-slate-700 fs-6 mb-0" style="line-height: 1.8;">
+                        {{ ur_advice.what_this_means }}
+                    </p>
+                </div>
+
+                <!-- 7-Day Plan Timeline -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-light">
+                    <h5 class="fw-bold text-slate-900 mb-3">
+                        <i class="fas fa-calendar-days text-emerald-600 ms-2"></i>7 روزہ عملی ایکشن پلان
+                    </h5>
+
+                    <div class="timeline-7day">
+                        <div class="timeline-step-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content-card bg-white">
+                                <span class="badge bg-danger-subtle text-danger px-2 py-1 small fw-bold mb-2">پہلا دن — آج</span>
+                                <h6 class="fw-bold text-slate-900 mb-1">فوری قرنطینہ اور کھیت کا معائنہ</h6>
+                                <p class="text-slate-700 fs-6 mb-0">{{ ur_advice.action_plan_7day.today }}</p>
                             </div>
                         </div>
-                        {% empty %}
-                        <div class="col-md-6">
-                            <div style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.875rem; padding: 6px 0;">
-                                <i class="fas fa-check-circle mt-1" style="color: var(--primary); flex-shrink: 0;"></i>
-                                <span style="color: var(--gray-700);">{% trans "Use certified disease-free seeds or planting material." %}</span>
+
+                        <div class="timeline-step-item">
+                            <div class="timeline-dot" style="background: var(--amber-500);"></div>
+                            <div class="timeline-content-card bg-white">
+                                <span class="badge bg-warning-subtle text-warning px-2 py-1 small fw-bold mb-2">دن 2 تا 3</span>
+                                <h6 class="fw-bold text-slate-900 mb-1">نمی کنٹرول اور بائیو تحفظ</h6>
+                                <p class="text-slate-700 fs-6 mb-0">{{ ur_advice.action_plan_7day.day_2_3 }}</p>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.875rem; padding: 6px 0;">
-                                <i class="fas fa-check-circle mt-1" style="color: var(--primary); flex-shrink: 0;"></i>
-                                <span style="color: var(--gray-700);">{% trans "Maintain proper field sanitation and remove infected plant debris." %}</span>
+
+                        <div class="timeline-step-item">
+                            <div class="timeline-dot" style="background: var(--sky-500);"></div>
+                            <div class="timeline-content-card bg-white">
+                                <span class="badge bg-info-subtle text-info px-2 py-1 small fw-bold mb-2">دن 4 تا 5</span>
+                                <h6 class="fw-bold text-slate-900 mb-1">بیماری کے پھیلاؤ کا جائزہ</h6>
+                                <p class="text-slate-700 fs-6 mb-0">{{ ur_advice.action_plan_7day.day_4_5 }}</p>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.875rem; padding: 6px 0;">
-                                <i class="fas fa-check-circle mt-1" style="color: var(--primary); flex-shrink: 0;"></i>
-                                <span style="color: var(--gray-700);">{% trans "Ensure adequate spacing to promote air circulation." %}</span>
+
+                        <div class="timeline-step-item" style="margin-bottom: 0;">
+                            <div class="timeline-dot" style="background: var(--emerald-600);"></div>
+                            <div class="timeline-content-card bg-white">
+                                <span class="badge bg-success-subtle text-success px-2 py-1 small fw-bold mb-2">دن 6 تا 7</span>
+                                <h6 class="fw-bold text-slate-900 mb-1">فصل کی بحالی اور حتمی رپورٹ</h6>
+                                <p class="text-slate-700 fs-6 mb-0">{{ ur_advice.action_plan_7day.day_6_7 }}</p>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.875rem; padding: 6px 0;">
-                                <i class="fas fa-check-circle mt-1" style="color: var(--primary); flex-shrink: 0;"></i>
-                                <span style="color: var(--gray-700);">{% trans "Monitor crops regularly for early signs of disease." %}</span>
+                    </div>
+                </div>
+
+                <!-- Immediate Actions Checklist -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                    <h5 class="fw-bold text-slate-900 mb-3">
+                        <i class="fas fa-list-check text-emerald-600 ms-2"></i>کھیت میں کرنے والے فوری اقدامات
+                    </h5>
+                    {% for act in ur_advice.immediate_actions %}
+                    <div class="checklist-item">
+                        <i class="far fa-circle check-icon"></i>
+                        <span class="fs-6 fw-semibold text-slate-800">{{ act }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Water & Nutrient Management -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-4 h-100" style="background: #f0f9ff; border: 1px solid #bae6fd;">
+                            <h6 class="fw-bold text-sky-900 mb-2">
+                                <i class="fas fa-droplet text-sky-600 ms-2"></i>پانی اور آبپاشی کی رہنمائی
+                            </h6>
+                            <p class="text-slate-700 fs-6 mb-0">{{ ur_advice.water_management }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-4 h-100" style="background: #f0fdf4; border: 1px solid #bbf7d0;">
+                            <h6 class="fw-bold text-emerald-900 mb-2">
+                                <i class="fas fa-seedling text-emerald-600 ms-2"></i>کھاد اور مٹی کی دیکھ بھال
+                            </h6>
+                            <p class="text-slate-700 fs-6 mb-0">{{ ur_advice.nutrient_management }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integrated Pest & Disease Management -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                    <h5 class="fw-bold text-slate-900 mb-3">
+                        <i class="fas fa-shield-halved text-violet-600 ms-2"></i>جامع انسداد و بیماری کا تدارک
+                    </h5>
+                    <div class="d-flex flex-column gap-3">
+                        <div class="p-3 rounded-3 bg-light border">
+                            <h6 class="fw-bold text-slate-900 mb-1">🌾 ثقافتی و روایتی طریقے (Cultural Control)</h6>
+                            <p class="fs-6 text-slate-700 mb-0">{{ ur_advice.disease_management.cultural }}</p>
+                        </div>
+                        <div class="p-3 rounded-3 bg-light border">
+                            <h6 class="fw-bold text-slate-900 mb-1">🌿 حیاتیاتی تدابیر (Biological Control)</h6>
+                            <p class="fs-6 text-slate-700 mb-0">{{ ur_advice.disease_management.biological }}</p>
+                        </div>
+                        <div class="p-3 rounded-3 bg-light border">
+                            <h6 class="fw-bold text-slate-900 mb-1">🧪 کیمیائی اسپرے و حفاظتی تدابیر (Chemical Control)</h6>
+                            <p class="fs-6 text-slate-700 mb-2">{{ ur_advice.disease_management.chemical }}</p>
+                            <div class="alert alert-warning py-2 px-3 small mb-0">
+                                <i class="fas fa-triangle-exclamation ms-1"></i>
+                                زرعی زہروں کے استعمال سے پہلے قریبی فیلڈ آفیسر یا زرعی توسیع کے ماہرین سے تصدیق لازمی کریں۔
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.875rem; padding: 6px 0;">
-                                <i class="fas fa-check-circle mt-1" style="color: var(--primary); flex-shrink: 0;"></i>
-                                <span style="color: var(--gray-700);">{% trans "Avoid overwatering — maintain balanced irrigation." %}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.875rem; padding: 6px 0;">
-                                <i class="fas fa-check-circle mt-1" style="color: var(--primary); flex-shrink: 0;"></i>
-                                <span style="color: var(--gray-700);">{% trans "Apply balanced fertilizers to strengthen plant immunity." %}</span>
-                            </div>
+                    </div>
+                </div>
+
+                <!-- Evidence & Sources -->
+                <div class="sources-card mb-4">
+                    <h5 class="fw-bold text-slate-900 mb-3">
+                        <i class="fas fa-book-bookmark text-emerald-600 ms-2"></i>مستند زرعی و سائنسی حوالہ جات
+                    </h5>
+                    <div class="d-flex flex-column gap-2">
+                        {% for src in ur_advice.evidence_sources %}
+                        <div class="p-3 bg-white rounded-3 border">
+                            <div class="fw-bold text-emerald-800 small">{{ src.organization }}</div>
+                            <div class="fs-6 fw-semibold text-slate-900">{{ src.document }}</div>
+                            <div class="small text-muted">{{ src.focus }}</div>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-{% endif %}
 
-<!-- ── Tab: Expert Advice ── -->
-<div class="advice-section" id="tab-expert">
-    <div class="row g-3 mt-0">
-        {% if advice.expert_advice %}
-        <div class="col-12">
-            <div class="advice-card" style="border-left: 4px solid var(--red-500);">
-                <div class="advice-card-header" style="color: var(--red-500);">
-                    <div class="advice-icon red"><i class="fas fa-user-doctor"></i></div>
-                    {% trans "When to Consult an Expert" %}
+            <!-- Right Sidebar for Urdu Mode -->
+            <div class="col-lg-4">
+                <!-- Critical Warning Signs -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background: #fff1f2; border: 1px solid #fecdd3 !important;">
+                    <h6 class="fw-bold text-rose-900 mb-2">
+                        <i class="fas fa-triangle-exclamation text-rose-600 ms-2"></i>خطرے کی علامات
+                    </h6>
+                    <p class="fs-6 text-rose-950 mb-0" style="line-height: 1.7;">
+                        {{ ur_advice.warning_signs }}
+                    </p>
                 </div>
-                <div class="advice-card-body">{{ advice.expert_advice }}</div>
-            </div>
-        </div>
-        {% endif %}
-        <div class="col-12">
-            <div class="card" style="background: linear-gradient(135deg, #fef2f2, #fff); border: 1px solid #fecaca;">
-                <div class="card-body">
-                    <div style="display: flex; align-items: flex-start; gap: 12px;">
-                        <div style="width: 44px; height: 44px; background: #fee2e2; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--red-500); font-size: 1.1rem;">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <div>
-                            <h6 class="fw-bold mb-1" style="color: var(--gray-800);">{% trans "Pakistan Agricultural Extension Services" %}</h6>
-                            <p style="font-size: 0.875rem; color: var(--gray-600); margin: 0;">
-                                {% trans "Contact your local agricultural extension officer for confirmed diagnosis, exact dosages, and field-specific advice. This AI tool supports — but does not replace — expert agricultural guidance." %}
-                            </p>
-                        </div>
+
+                <!-- Extension Hotline -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                    <h6 class="fw-bold text-slate-900 mb-2">
+                        <i class="fas fa-headset text-emerald-600 ms-2"></i>ماہرین سے رہنمائی
+                    </h6>
+                    <p class="fs-6 text-slate-600 mb-3">{{ ur_advice.expert_advice }}</p>
+                    <div class="p-2 bg-light rounded text-center fw-bold text-slate-800 border fs-6">
+                        📞 ہیلپ لائن: 0800-12345 (مفت کال)
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- ── Additional Notes ── -->
-{% if recommendation.additional_notes %}
-<div class="card mt-3">
-    <div class="card-body">
-        <h6 class="fw-bold mb-2" style="color: var(--gray-800);">
-            <i class="fas fa-sticky-note me-2" style="color: var(--amber-500);"></i>{% trans "Additional Notes" %}
-        </h6>
-        <p style="font-size: 0.9rem; color: var(--gray-700); margin: 0;">{{ recommendation.additional_notes }}</p>
-    </div>
-</div>
-{% endif %}
 
-<!-- ── Feedback Section ── -->
-<div class="card mt-3">
-    <div class="card-body">
-        <h6 class="fw-bold mb-1" style="color: var(--gray-800);">{% trans "Was This Helpful?" %}</h6>
-        <p class="small text-muted mb-3">{% trans "Your feedback helps us improve our recommendations." %}</p>
-        {% if user_feedback %}
-        <div class="alert alert-success" style="display: inline-flex;">
-            <i class="fas fa-check-circle"></i>
-            {% trans "Thank you for your feedback!" %}
+    {% else %}
+    <!-- ══════════════════════════════════════════════════════════════
+         ENGLISH MODE (English first + Complete Urdu underneath)
+    ══════════════════════════════════════════════════════════════ -->
+
+    <!-- ── SECTION 1: AI RECOMMENDATION (ENGLISH) ── -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-5">
+        <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-4">
+            <h3 class="fw-bold text-slate-900 mb-0">
+                <i class="fas fa-seedling text-emerald-600 me-2"></i>AI Recommendation (English)
+            </h3>
+            <span class="badge bg-emerald-100 text-emerald-800 px-3 py-2 rounded-pill">PARC Grounded</span>
         </div>
-        {% else %}
-        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <a href="{% url 'recommendation:feedback' recommendation.id %}" class="btn btn-primary btn-sm">
-                <i class="fas fa-star"></i> {% trans "Submit Feedback" %}
-            </a>
-            <span class="small text-muted">{% trans "Takes less than 30 seconds" %}</span>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <!-- What this means -->
+                <div class="p-3 rounded-3 mb-4" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                    <h5 class="fw-bold text-slate-900 mb-2">
+                        <i class="fas fa-circle-info text-emerald-600 me-2"></i>What This Means for Your Harvest
+                    </h5>
+                    <p class="text-slate-700 mb-0" style="line-height: 1.75;">
+                        {{ en_advice.what_this_means }}
+                    </p>
+                </div>
+
+                <!-- 7-Day Plan Timeline -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-light">
+                    <h5 class="fw-bold text-slate-900 mb-3">
+                        <i class="fas fa-calendar-days text-emerald-600 me-2"></i>7-Day Practical Action Plan
+                    </h5>
+
+                    <div class="timeline-7day">
+                        <div class="timeline-step-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content-card bg-white">
+                                <span class="badge bg-danger-subtle text-danger px-2 py-1 small fw-bold mb-2">DAY 1 — TODAY</span>
+                                <h6 class="fw-bold text-slate-900 mb-1">Immediate Quarantine & Scouting</h6>
+                                <p class="small text-slate-700 mb-0">{{ en_advice.action_plan_7day.today }}</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step-item">
+                            <div class="timeline-dot" style="background: var(--amber-500);"></div>
+                            <div class="timeline-content-card bg-white">
+                                <span class="badge bg-warning-subtle text-warning px-2 py-1 small fw-bold mb-2">DAYS 2–3</span>
+                                <h6 class="fw-bold text-slate-900 mb-1">Moisture Control & Bioprotection</h6>
+                                <p class="small text-slate-700 mb-0">{{ en_advice.action_plan_7day.day_2_3 }}</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step-item">
+                            <div class="timeline-dot" style="background: var(--sky-500);"></div>
+                            <div class="timeline-content-card bg-white">
+                                <span class="badge bg-info-subtle text-info px-2 py-1 small fw-bold mb-2">DAYS 4–5</span>
+                                <h6 class="fw-bold text-slate-900 mb-1">Spread Assessment & Buffer Monitoring</h6>
+                                <p class="small text-slate-700 mb-0">{{ en_advice.action_plan_7day.day_4_5 }}</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step-item" style="margin-bottom: 0;">
+                            <div class="timeline-dot" style="background: var(--emerald-600);"></div>
+                            <div class="timeline-content-card bg-white">
+                                <span class="badge bg-success-subtle text-success px-2 py-1 small fw-bold mb-2">DAYS 6–7</span>
+                                <h6 class="fw-bold text-slate-900 mb-1">Recovery Audit & Escalation</h6>
+                                <p class="small text-slate-700 mb-0">{{ en_advice.action_plan_7day.day_6_7 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Immediate Actions Checklist -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                    <h5 class="fw-bold text-slate-900 mb-3">
+                        <i class="fas fa-list-check text-emerald-600 me-2"></i>Immediate On-Field Action Steps
+                    </h5>
+                    {% for act in en_advice.immediate_actions %}
+                    <div class="checklist-item">
+                        <i class="far fa-circle check-icon"></i>
+                        <span class="small fw-semibold text-slate-800">{{ act }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Water & Nutrient Management -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-4 h-100" style="background: #f0f9ff; border: 1px solid #bae6fd;">
+                            <h6 class="fw-bold text-sky-900 mb-2">
+                                <i class="fas fa-droplet text-sky-600 me-2"></i>Water & Moisture Protocol
+                            </h6>
+                            <p class="small text-slate-700 mb-0">{{ en_advice.water_management }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-4 h-100" style="background: #f0fdf4; border: 1px solid #bbf7d0;">
+                            <h6 class="fw-bold text-emerald-900 mb-2">
+                                <i class="fas fa-seedling text-emerald-600 me-2"></i>Nutrient & Soil Care
+                            </h6>
+                            <p class="small text-slate-700 mb-0">{{ en_advice.nutrient_management }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integrated Pest & Disease Management -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                    <h5 class="fw-bold text-slate-900 mb-3">
+                        <i class="fas fa-shield-halved text-violet-600 me-2"></i>Integrated Disease Management
+                    </h5>
+                    <div class="d-flex flex-column gap-3">
+                        <div class="p-3 rounded-3 bg-light border">
+                            <h6 class="fw-bold text-slate-900 mb-1">🌾 Cultural Practices & Sanitation</h6>
+                            <p class="small text-slate-700 mb-0">{{ en_advice.disease_management.cultural }}</p>
+                        </div>
+                        <div class="p-3 rounded-3 bg-light border">
+                            <h6 class="fw-bold text-slate-900 mb-1">🌿 Biological & Organic Protection</h6>
+                            <p class="small text-slate-700 mb-0">{{ en_advice.disease_management.biological }}</p>
+                        </div>
+                        <div class="p-3 rounded-3 bg-light border">
+                            <h6 class="fw-bold text-slate-900 mb-1">🧪 Chemical Treatment (Extension Regulated)</h6>
+                            <p class="small text-slate-700 mb-2">{{ en_advice.disease_management.chemical }}</p>
+                            <div class="alert alert-warning py-2 px-3 small mb-0">
+                                <i class="fas fa-triangle-exclamation me-1"></i>
+                                Always follow registered label rates and verify chemical applications with local agricultural extension officers.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evidence & Sources -->
+                <div class="sources-card mb-4">
+                    <h5 class="fw-bold text-slate-900 mb-3">
+                        <i class="fas fa-book-bookmark text-emerald-600 me-2"></i>Authoritative Research Citations
+                    </h5>
+                    <div class="d-flex flex-column gap-2">
+                        {% for src in en_advice.evidence_sources %}
+                        <div class="p-3 bg-white rounded-3 border">
+                            <div class="fw-bold text-emerald-800 small">{{ src.organization }}</div>
+                            <div class="small fw-semibold text-slate-900">{{ src.document }}</div>
+                            <div class="small text-muted">{{ src.focus }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar (English) -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background: #fff1f2; border: 1px solid #fecdd3 !important;">
+                    <h6 class="fw-bold text-rose-900 mb-2">
+                        <i class="fas fa-triangle-exclamation text-rose-600 me-2"></i>Critical Warning Signs
+                    </h6>
+                    <p class="small text-rose-950 mb-0" style="line-height: 1.65;">
+                        {{ en_advice.warning_signs }}
+                    </p>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                    <h6 class="fw-bold text-slate-900 mb-2">
+                        <i class="fas fa-headset text-emerald-600 me-2"></i>Extension Advisory
+                    </h6>
+                    <p class="small text-slate-600 mb-3">{{ en_advice.expert_advice }}</p>
+                    <div class="p-2 bg-light rounded text-center small fw-bold text-slate-800 border">
+                        📞 Hotline: 0800-12345 (Toll-Free)
+                    </div>
+                </div>
+            </div>
         </div>
-        {% endif %}
     </div>
-</div>
 
-<!-- ── Action Buttons ── -->
-<div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 1rem;">
-    <a href="{% url 'detection:index' %}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> {% trans "New Detection" %}
-    </a>
-    <a href="{% url 'history:list' %}" class="btn btn-outline-secondary">
-        <i class="fas fa-clock-rotate-left"></i> {% trans "View History" %}
-    </a>
-    <a href="{% url 'detection:result' prediction.id %}" class="btn btn-outline-secondary">
-        <i class="fas fa-chart-bar"></i> {% trans "Detection Result" %}
-    </a>
-</div>
 
-{% else %}
-<!-- No recommendation state -->
-<div class="card">
-    <div class="card-body text-center" style="padding: 3rem;">
-        <div style="width: 72px; height: 72px; background: var(--gray-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.75rem; color: var(--gray-400);">
-            <i class="fas fa-lightbulb"></i>
+    <!-- ── SECTION 2: AI RECOMMENDATION (اردو) UNDERNEATH ── -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" dir="rtl" style="font-family: var(--font-urdu); background: #fdfefe; border: 1.5px solid var(--emerald-200) !important;">
+        <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-4">
+            <h3 class="fw-bold text-slate-900 mb-0">
+                <i class="fas fa-seedling text-emerald-600 ms-2"></i>AI Recommendation (اردو)
+            </h3>
+            <span class="badge bg-emerald-100 text-emerald-800 px-3 py-2 rounded-pill fs-6">مکمل اردو ترجمہ</span>
         </div>
-        <h5 class="fw-bold mb-2" style="color: var(--gray-700);">{% trans "No Recommendation Available" %}</h5>
-        <p class="text-muted mb-4">{% trans "Please complete a disease detection scan first to get AI recommendations." %}</p>
-        <a href="{% url 'detection:index' %}" class="btn btn-primary">
-            <i class="fas fa-microscope"></i> {% trans "Go to Detection" %}
-        </a>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <!-- What this means (Urdu) -->
+                <div class="p-3 rounded-3 mb-4 bg-white border">
+                    <h5 class="fw-bold text-slate-900 mb-2">
+                        <i class="fas fa-circle-info text-emerald-600 ms-2"></i>اس تشخیص کا آپ کی فصل کے لیے کیا مطلب ہے؟
+                    </h5>
+                    <p class="text-slate-700 fs-6 mb-0" style="line-height: 1.8;">
+                        {{ ur_advice.what_this_means }}
+                    </p>
+                </div>
+
+                <!-- 7-Day Plan Timeline (Urdu) -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-light">
+                    <h5 class="fw-bold text-slate-900 mb-3">
+                        <i class="fas fa-calendar-days text-emerald-600 ms-2"></i>7 روزہ عملی ایکشن پلان (اردو)
+                    </h5>
+
+                    <div class="timeline-7day">
+                        <div class="timeline-step-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content-card bg-white">
+                                <span class="badge bg-danger-subtle text-danger px-2 py-1 small fw-bold mb-2">پہلا دن — آج</span>
+                                <h6 class="fw-bold text-slate-900 mb-1">فوری قرنطینہ اور کھیت کا معائنہ</h6>
+                                <p class="text-slate-700 fs-6 mb-0">{{ ur_advice.action_plan_7day.today }}</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step-item">
+                            <div class="timeline-dot" style="background: var(--amber-500);"></div>
+                            <div class="timeline-content-card bg-white">
+                                <span class="badge bg-warning-subtle text-warning px-2 py-1 small fw-bold mb-2">دن 2 تا 3</span>
+                                <h6 class="fw-bold text-slate-900 mb-1">نمی کنٹرول اور بائیو تحفظ</h6>
+                                <p class="text-slate-700 fs-6 mb-0">{{ ur_advice.action_plan_7day.day_2_3 }}</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step-item">
+                            <div class="timeline-dot" style="background: var(--sky-500);"></div>
+                            <div class="timeline-content-card bg-white">
+                                <span class="badge bg-info-subtle text-info px-2 py-1 small fw-bold mb-2">دن 4 تا 5</span>
+                                <h6 class="fw-bold text-slate-900 mb-1">بیماری کے پھیلاؤ کا جائزہ</h6>
+                                <p class="text-slate-700 fs-6 mb-0">{{ ur_advice.action_plan_7day.day_4_5 }}</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-step-item" style="margin-bottom: 0;">
+                            <div class="timeline-dot" style="background: var(--emerald-600);"></div>
+                            <div class="timeline-content-card bg-white">
+                                <span class="badge bg-success-subtle text-success px-2 py-1 small fw-bold mb-2">دن 6 تا 7</span>
+                                <h6 class="fw-bold text-slate-900 mb-1">فصل کی بحالی اور حتمی رپورٹ</h6>
+                                <p class="text-slate-700 fs-6 mb-0">{{ ur_advice.action_plan_7day.day_6_7 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Immediate Actions Checklist (Urdu) -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                    <h5 class="fw-bold text-slate-900 mb-3">
+                        <i class="fas fa-list-check text-emerald-600 ms-2"></i>کھیت میں کرنے والے فوری اقدامات
+                    </h5>
+                    {% for act in ur_advice.immediate_actions %}
+                    <div class="checklist-item">
+                        <i class="far fa-circle check-icon"></i>
+                        <span class="fs-6 fw-semibold text-slate-800">{{ act }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Water & Nutrient Management (Urdu) -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-4 h-100" style="background: #f0f9ff; border: 1px solid #bae6fd;">
+                            <h6 class="fw-bold text-sky-900 mb-2">
+                                <i class="fas fa-droplet text-sky-600 ms-2"></i>پانی اور آبپاشی کی رہنمائی
+                            </h6>
+                            <p class="text-slate-700 fs-6 mb-0">{{ ur_advice.water_management }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-4 h-100" style="background: #f0fdf4; border: 1px solid #bbf7d0;">
+                            <h6 class="fw-bold text-emerald-900 mb-2">
+                                <i class="fas fa-seedling text-emerald-600 ms-2"></i>کھاد اور مٹی کی دیکھ بھال
+                            </h6>
+                            <p class="text-slate-700 fs-6 mb-0">{{ ur_advice.nutrient_management }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integrated Pest & Disease Management (Urdu) -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                    <h5 class="fw-bold text-slate-900 mb-3">
+                        <i class="fas fa-shield-halved text-violet-600 ms-2"></i>جامع انسداد و بیماری کا تدارک
+                    </h5>
+                    <div class="d-flex flex-column gap-3">
+                        <div class="p-3 rounded-3 bg-light border">
+                            <h6 class="fw-bold text-slate-900 mb-1">🌾 ثقافتی و روایتی طریقے (Cultural Control)</h6>
+                            <p class="fs-6 text-slate-700 mb-0">{{ ur_advice.disease_management.cultural }}</p>
+                        </div>
+                        <div class="p-3 rounded-3 bg-light border">
+                            <h6 class="fw-bold text-slate-900 mb-1">🌿 حیاتیاتی تدابیر (Biological Control)</h6>
+                            <p class="fs-6 text-slate-700 mb-0">{{ ur_advice.disease_management.biological }}</p>
+                        </div>
+                        <div class="p-3 rounded-3 bg-light border">
+                            <h6 class="fw-bold text-slate-900 mb-1">🧪 کیمیائی اسپرے و حفاظتی تدابیر (Chemical Control)</h6>
+                            <p class="fs-6 text-slate-700 mb-2">{{ ur_advice.disease_management.chemical }}</p>
+                            <div class="alert alert-warning py-2 px-3 small mb-0">
+                                <i class="fas fa-triangle-exclamation ms-1"></i>
+                                زرعی زہروں کے استعمال سے پہلے قریبی فیلڈ آفیسر یا زرعی توسیع کے ماہرین سے تصدیق لازمی کریں۔
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar (Urdu) -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background: #fff1f2; border: 1px solid #fecdd3 !important;">
+                    <h6 class="fw-bold text-rose-900 mb-2">
+                        <i class="fas fa-triangle-exclamation text-rose-600 ms-2"></i>خطرے کی علامات
+                    </h6>
+                    <p class="fs-6 text-rose-950 mb-0" style="line-height: 1.7;">
+                        {{ ur_advice.warning_signs }}
+                    </p>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                    <h6 class="fw-bold text-slate-900 mb-2">
+                        <i class="fas fa-headset text-emerald-600 ms-2"></i>ماہرین سے رہنمائی
+                    </h6>
+                    <p class="fs-6 text-slate-600 mb-3">{{ ur_advice.expert_advice }}</p>
+                    <div class="p-2 bg-light rounded text-center fw-bold text-slate-800 border fs-6">
+                        📞 ہیلپ لائن: 0800-12345
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    {% endif %}
+
 </div>
-{% endif %}
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Tab switching
-    const tabBtns = document.querySelectorAll('.tab-btn[data-tab]');
-    const tabSections = document.querySelectorAll('.advice-section');
-
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', function () {
-            const target = this.dataset.tab;
-
-            tabBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
-            tabSections.forEach(s => s.classList.remove('active'));
-
-            this.classList.add('active');
-            this.setAttribute('aria-selected', 'true');
-            const section = document.getElementById('tab-' + target);
-            if (section) section.classList.add('active');
-        });
-    });
-});
-</script>
 {% endblock %}

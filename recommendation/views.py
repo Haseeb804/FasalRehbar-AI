@@ -31,8 +31,9 @@ def recommendation_detail(request, prediction_id):
 
     ai_content = generate_recommendation(recommendation)
     current_lang = translation.get_language() or "en"
-    lang_key = "ur" if current_lang.startswith("ur") else "en"
-    advice = ai_content.get(lang_key) or ai_content.get("en") or {}
+    is_urdu = current_lang.startswith("ur")
+    en_advice = ai_content.get("en") or {}
+    ur_advice = ai_content.get("ur") or {}
 
     # Get user feedback if exists
     user_feedback = UserFeedback.objects.filter(
@@ -43,9 +44,11 @@ def recommendation_detail(request, prediction_id):
     context = {
         "prediction": prediction,
         "recommendation": recommendation,
-        "advice": advice,
         "ai_content": ai_content,
-        "current_lang": lang_key,
+        "en_advice": en_advice,
+        "ur_advice": ur_advice,
+        "is_urdu": is_urdu,
+        "current_lang": "ur" if is_urdu else "en",
         "user_feedback": user_feedback,
         "page_title": "Recommendations",
     }

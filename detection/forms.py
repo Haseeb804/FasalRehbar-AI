@@ -1,9 +1,9 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 from .models import ScanImage
 
 # All MIME types that Pillow can open and that we accept for ML inference.
-# jfif is a JPEG variant saved by many browsers/phones; webp is increasingly common.
 ALLOWED_MIME_TYPES = {
     "image/jpeg",
     "image/jpg",
@@ -16,9 +16,27 @@ ALLOWED_MIME_TYPES = {
 
 ALLOWED_EXTENSIONS_DISPLAY = "PNG, JPG, JPEG, JFIF, WEBP"
 
+CROP_TYPE_CHOICES = [
+    ("auto", _("🤖 Auto-Detect Crop (AI Recommended)")),
+    ("Onion", _("🧅 Onion (پیاز)")),
+    ("Mango", _("🥭 Mango (آم)")),
+    ("Sugarcane", _("🌱 Sugarcane (گنا)")),
+]
+
 
 class ImageUploadForm(forms.ModelForm):
     """Form for uploading scan images for plant disease detection."""
+
+    crop_type = forms.ChoiceField(
+        choices=CROP_TYPE_CHOICES,
+        required=False,
+        initial="auto",
+        label=_("Target Crop"),
+        widget=forms.Select(attrs={
+            "class": "form-select fw-semibold py-2 px-3 border-emerald-200",
+            "id": "id_crop_type",
+        })
+    )
 
     class Meta:
         model = ScanImage
@@ -26,19 +44,16 @@ class ImageUploadForm(forms.ModelForm):
         widgets = {
             "image": forms.FileInput(attrs={
                 "class": "form-control",
-                # Keep accept broad — the browser uses this only for the file-picker UI.
-                # The real validation is in clean_image() below.
                 "accept": "image/*",
-                # ID matches the JS getElementById('id_image') calls in detection/index.html
                 "id": "id_image",
-                "style": "display: none;",  # hidden — users interact with the drop-zone
+                "style": "display: none;",
             })
         }
 
     def clean_image(self):
         image = self.cleaned_data.get("image")
         if image:
-            if image.size > 10 * 1024 * 1024:  # 10 MB limit (raised from 5 MB)
+            if image.size > 10 * 1024 * 1024:  # 10 MB limit
                 raise ValidationError("Image file must not exceed 10 MB.")
             content_type = getattr(image, "content_type", "") or ""
             if content_type and content_type not in ALLOWED_MIME_TYPES:
@@ -47,4 +62,3 @@ class ImageUploadForm(forms.ModelForm):
                     f"Please upload a {ALLOWED_EXTENSIONS_DISPLAY} file."
                 )
         return image
-

@@ -47,38 +47,49 @@ class DiseasePredictor:
 
 class RecommendationEngine:
     """
-    Lightweight KB-only recommendation summary used on the result page.
+    Evidence-grounded recommendation summary used on the result page.
     The full bilingual, RAG-generated advice lives in recommendation/rag.py
     and is shown on the dedicated recommendations page.
-    This stays a simple, dependency-free fallback so the result page
-    never needs the LLM to render.
     """
 
     @staticmethod
     def get_recommendations(prediction: Prediction) -> Dict[str, Any]:
-        recommendations = {"treatment": [], "prevention": [], "urgency": "normal"}
+        from recommendation.knowledge_base import get_agri_knowledge
+        
+        crop_name = prediction.crop.name if prediction.crop else "Onion"
+        disease_name = prediction.disease.name if prediction.disease else prediction.yolo_top_label
+        kb = get_agri_knowledge(crop_name, disease_name, is_healthy=prediction.is_healthy)
 
-        if prediction.disease:
-            recommendations["treatment"] = [
-                line for line in prediction.disease.treatment.split("\n") if line.strip()
-            ] or ["See the Recommendations page for detailed treatment guidance."]
-            recommendations["prevention"] = [
-                line for line in prediction.disease.prevention.split("\n") if line.strip()
-            ] or ["See the Recommendations page for prevention guidance."]
-
-            if prediction.confidence_level == "high":
-                recommendations["urgency"] = "urgent"
-            elif prediction.confidence_level == "medium":
-                recommendations["urgency"] = "moderate"
+        urgency = "normal"
+        if not prediction.is_healthy:
+            severity = kb.get("severity", "moderate").lower()
+            if severity in ("critical", "high") or prediction.confidence_level == "high":
+                urgency = "urgent"
+            elif severity == "moderate":
+                urgency = "moderate"
         else:
-            recommendations["urgency"] = "none"
-            recommendations["treatment"] = ["Continue regular crop maintenance."]
-            recommendations["prevention"] = [
-                "Maintain proper irrigation.",
-                "Monitor plant health regularly.",
-            ]
+            urgency = "none"
 
-        return recommendations
+        return {
+            "urgency": urgency,
+            "severity": kb.get("severity", "moderate"),
+            "growth_stage": kb.get("growth_stage_vulnerability", "Vegetative to Maturity"),
+            "what_this_means": kb.get("what_this_means_en", ""),
+            "what_this_means_ur": kb.get("what_this_means_ur", ""),
+            "immediate_actions": kb.get("immediate_actions_en", []),
+            "immediate_actions_ur": kb.get("immediate_actions_ur", []),
+            "treatment": [
+                kb.get("disease_management_en", {}).get("cultural", ""),
+                kb.get("disease_management_en", {}).get("biological", ""),
+                kb.get("disease_management_en", {}).get("chemical", ""),
+            ] if not prediction.is_healthy else ["Continue regular crop maintenance."],
+            "prevention": [
+                kb.get("water_management_en", ""),
+                kb.get("nutrient_management_en", ""),
+            ],
+            "evidence_sources": kb.get("evidence_sources", []),
+            "action_plan_7day": kb.get("action_plan_7day_en", {}),
+        }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -198,10 +209,10 @@ class DetectionService:
 
     # ── main pipeline ─────────────────────────────────────────────────────────
 
-    def process_scan(self, scan_image: ScanImage) -> Optional[Prediction]:
+    def process_scan(self, scan_image: ScanImage, selected_crop: str = "auto") -> Optional[Prediction]:
         """
         Full pipeline:
-          1. EfficientNet-B0  → classify crop
+          1. EfficientNet-B0 + Joint Verification → classify crop (or use user-selected crop)
           2. YOLOv8s-cls      → detect disease
           3. Save Prediction row
           4. Auto-create PredictionHistory
@@ -212,10 +223,16 @@ class DetectionService:
         try:
             start_time = time.time()
             image_path = scan_image.image.path
-            logger.info("─── Scan %s started: %s ───", scan_image.id, image_path)
+            logger.info("─── Scan %s started: %s (crop preference: %s) ───", scan_image.id, image_path, selected_crop)
 
-            # ── Stage 1: Crop Classification (EfficientNet-B0) ────────────────
-            crop_name, crop_confidence = self.crop_classifier.classify(image_path)
+            # ── Stage 1: Crop Classification ──────────────────────────────
+            if selected_crop and selected_crop.lower() != "auto":
+                crop_name = selected_crop.capitalize()
+                crop_confidence = 1.0
+                logger.info("Scan %s — Using user-locked crop: '%s'", scan_image.id, crop_name)
+            else:
+                crop_name, crop_confidence = self.crop_classifier.classify(image_path)
+
             if not crop_name:
                 logger.error(
                     "Scan %s — crop classifier returned no result. "

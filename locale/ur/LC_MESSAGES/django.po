@@ -1,0 +1,1518 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-22 19:08+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\templates\base\base.html:47 .\templates\base\base.html:166
+msgid "Home"
+msgstr "ہوم"
+
+#: .\templates\base\base.html:48
+msgid "About"
+msgstr "ہمارے بارے میں"
+
+#: .\templates\base\base.html:49 .\templates\base\base.html:168
+msgid "Services"
+msgstr "خدمات"
+
+#: .\templates\base\base.html:50
+msgid "Contact"
+msgstr "رابطہ کریں"
+
+#: .\templates\base\base.html:52 .\templates\base\base.html:171
+#: .\templates\base\dashboard_base.html:31 .\templates\core\home.html:37
+#: .\templates\dashboard\index.html:4
+msgid "Dashboard"
+msgstr "ڈیش بورڈ"
+
+#: .\templates\base\base.html:55 .\templates\dashboard\index.html:63
+msgid "Detect Disease"
+msgstr "بیماری کی تشخیص"
+
+#: .\templates\base\base.html:60 .\templates\base\dashboard_base.html:66
+msgid "Logout"
+msgstr "لاگ آؤٹ"
+
+#: .\templates\base\base.html:64 .\templates\core\home.html:46
+msgid "Login"
+msgstr "لاگ ان"
+
+#: .\templates\base\base.html:67
+msgid "Get Started"
+msgstr "شروع کریں"
+
+#: .\templates\base\base.html:140
+msgid "Please wait..."
+msgstr "براہ کرم انتظار کریں..."
+
+#: .\templates\base\base.html:164
+msgid "Platform"
+msgstr "پلیٹ فارم"
+
+#: .\templates\base\base.html:167
+msgid "About Us"
+msgstr "ہمارے بارے میں"
+
+#: .\templates\base\base.html:170 .\templates\base\dashboard_base.html:39
+#: .\templates\core\home.html:4 .\templates\core\home.html:271
+#: .\templates\detection\index.html:4 .\templates\detection\index.html:129
+msgid "Disease Detection"
+msgstr "بیماری کی تشخیص"
+
+#: .\templates\base\base.html:177
+msgid "Support"
+msgstr "سپورٹ"
+
+#: .\templates\base\base.html:179
+msgid "FAQ"
+msgstr "عمومی سوالات"
+
+#: .\templates\base\base.html:180
+msgid "Contact Us"
+msgstr "ہم سے رابطہ کریں"
+
+#: .\templates\base\base.html:181
+msgid "Privacy Policy"
+msgstr "رازداری کی پالیسی"
+
+#: .\templates\base\base.html:182
+msgid "Terms of Service"
+msgstr "سروس کی شرائط"
+
+#: .\templates\base\base.html:187 .\templates\core\home.html:115
+msgid "Crops Supported"
+msgstr "معاون فصلیں"
+
+#: .\templates\base\base.html:201
+msgid "All rights reserved."
+msgstr "جملہ حقوق محفوظ ہیں۔"
+
+#: .\templates\base\dashboard_base.html:45 .\templates\core\home.html:210
+#: .\templates\dashboard\index.html:66 .\templates\history\list.html:4
+#: .\templates\history\list.html:82
+msgid "Scan History"
+msgstr "اسکین کی تاریخ"
+
+#: .\templates\base\dashboard_base.html:53 .\templates\dashboard\index.html:69
+msgid "My Profile"
+msgstr "میری پروفائل"
+
+#: .\templates\base\dashboard_base.html:59
+msgid "Settings"
+msgstr "ترتیبات"
+
+#: .\templates\base\dashboard_base.html:74 .\templates\dashboard\index.html:29
+msgid "Total Scans"
+msgstr "کل اسکین"
+
+#: .\templates\base\dashboard_base.html:78 .\templates\dashboard\index.html:19
+#: .\templates\detection\result.html:286 .\templates\history\list.html:92
+msgid "New Scan"
+msgstr "نیا اسکین"
+
+#: .\templates\core\home.html:18
+msgid "AI-Powered Agriculture"
+msgstr "اے آئی سے چلنے والی زراعت"
+
+#: .\templates\core\home.html:21
+#| msgid "Detect Disease"
+msgid "Detect Plant Diseases"
+msgstr "پودوں کی بیماریوں کی تشخیص کریں"
+
+#: .\templates\core\home.html:22
+msgid "Before They Spread"
+msgstr "ان کے پھیلنے سے پہلے"
+
+#: .\templates\core\home.html:25
+msgid ""
+"Upload a leaf photo. Our AI instantly identifies your crop, detects "
+"diseases, and generates expert treatment recommendations — all in seconds."
+msgstr ""
+"پتے کی تصویر اپ لوڈ کریں۔ ہمارا اے آئی فوری طور پر آپ کی فصل کی شناخت کرتا "
+"ہے، بیماریوں کا پتہ لگاتا ہے، اور ماہرین کے علاج کی سفارشات تیار کرتا ہے - "
+"سب کچھ سیکنڈوں میں۔"
+
+#: .\templates\core\home.html:33
+#| msgid "Detect Disease"
+msgid "Detect Disease Now"
+msgstr "اب بیماری کا پتہ لگائیں"
+
+#: .\templates\core\home.html:42
+#| msgid "Get Started"
+msgid "Get Started Free"
+msgstr "مفت شروع کریں"
+
+#: .\templates\core\home.html:55
+msgid "No credit card required"
+msgstr "کریڈٹ کارڈ کی ضرورت نہیں"
+
+#: .\templates\core\home.html:59
+msgid "Results in under 5 seconds"
+msgstr "5 سیکنڈ سے کم وقت میں نتائج"
+
+#: .\templates\core\home.html:63
+msgid "Available in Urdu & English"
+msgstr "اردو اور انگریزی میں دستیاب ہے۔"
+
+#: .\templates\core\home.html:76
+msgid "FasalRehbar AI AI Detection"
+msgstr "فصل رہبر اے آئی کی تشخیص"
+
+#: .\templates\core\home.html:81
+msgid "Classified Crop"
+msgstr "درجہ بند فصل"
+
+#: .\templates\core\home.html:82
+#| msgid "Mango"
+msgid "Mango Leaf"
+msgstr "آم کا پتہ"
+
+#: .\templates\core\home.html:89
+#| msgid "Disease Detection"
+msgid "Disease Detected"
+msgstr "بیماری کی تشخیص"
+
+#: .\templates\core\home.html:90
+#| msgid "e.g. Anthracnose"
+msgid "Anthracnose"
+msgstr "اینتھراکنوز"
+
+#: .\templates\core\home.html:97
+#| msgid "AI Recommendations"
+msgid "AI Recommendation:"
+msgstr "اے آئی کی سفارش:"
+
+#: .\templates\core\home.html:97
+msgid ""
+"Apply copper-based fungicide spray immediately. Remove infected leaves to "
+"prevent spread."
+msgstr ""
+"تانبے پر مبنی فنگسائڈ کا فوری سپرے کریں۔ پھیلاؤ کو روکنے کے لیے متاثرہ پتوں "
+"کو ہٹا دیں۔"
+
+#: .\templates\core\home.html:119
+#| msgid "Disease Detection"
+msgid "Diseases Detected"
+msgstr "دریافت شدہ بیماریاں"
+
+#: .\templates\core\home.html:123
+#| msgid "Detection"
+msgid "Detection Speed"
+msgstr "تشخیص کی رفتار"
+
+#: .\templates\core\home.html:127
+msgid "Languages (EN / اردو)"
+msgstr "زبانیں (انگریزی / اردو)"
+
+#: .\templates\core\home.html:140
+msgid "Key Features"
+msgstr "اہم خصوصیات"
+
+#: .\templates\core\home.html:143
+msgid "Everything You Need to"
+msgstr "وہ سب کچھ جس کی آپ کو ضرورت ہے۔"
+
+#: .\templates\core\home.html:143
+msgid "Protect Your Crops"
+msgstr "اپنی فصلوں کی حفاظت کریں۔"
+
+#: .\templates\core\home.html:146
+msgid ""
+"A complete AI pipeline from image upload to expert treatment recommendation,"
+" designed for Pakistan's farmers."
+msgstr ""
+"تصویر اپ لوڈ کرنے سے لے کر ماہرانہ علاج کی سفارش تک ایک مکمل اے آئی پائپ "
+"لائن، جو پاکستان کے کسانوں کے لیے تیار کی گئی ہے۔"
+
+#: .\templates\core\home.html:158
+msgid "Two-Stage AI Pipeline"
+msgstr "دو مرحلہ اے آئی پائپ لائن"
+
+#: .\templates\core\home.html:160
+msgid ""
+"EfficientNet-B0 first identifies the crop (Mango, Onion, or Sugarcane), then"
+" YOLOv8 takes over for precise, targeted disease detection."
+msgstr ""
+"EfficientNet-B0 پہلے فصل کی شناخت کرتا ہے، پھر YOLOv8 بیماریوں کی نشاندہی "
+"کرتا ہے۔"
+
+#: .\templates\core\home.html:171
+#| msgid "AI Recommendations"
+msgid "RAG Recommendations"
+msgstr "RAG کی سفارشات"
+
+#: .\templates\core\home.html:173
+msgid ""
+"Retrieval-Augmented Generation grounds every recommendation in verified "
+"disease knowledge — no hallucinations, no made-up dosages."
+msgstr "یہ ٹیکنالوجی مصدقہ معلومات سے درست سفارشات فراہم کرتی ہے۔"
+
+#: .\templates\core\home.html:184
+#| msgid "Grad-CAM analysis"
+msgid "Grad-CAM Visualization"
+msgstr "Grad-CAM ویژولائزیشن"
+
+#: .\templates\core\home.html:186
+msgid ""
+"See exactly where the AI is focusing on your leaf. Heatmap overlays and "
+"bounding boxes show the approximate affected region."
+msgstr "تصویر میں دیکھیں کہ اے آئی نے پتے پر کہاں توجہ دی ہے۔"
+
+#: .\templates\core\home.html:197
+msgid "Bilingual Support"
+msgstr "دو لسانی مدد"
+
+#: .\templates\core\home.html:199
+msgid ""
+"Full English and Urdu interface with AI-generated recommendations available "
+"in both languages. Designed for all Pakistani farmers."
+msgstr "انگریزی اور اردو انٹرفیس تمام کسانوں کے لیے دستیاب ہے۔"
+
+#: .\templates\core\home.html:212
+msgid ""
+"Every scan is saved with its results. Track disease progression over time "
+"and review past recommendations at any moment."
+msgstr ""
+"ہر اسکین نتائج کے ساتھ محفوظ کیا جاتا ہے تاکہ آپ کسی بھی وقت پرانی سفارشات "
+"کا جائزہ لے سکیں۔"
+
+#: .\templates\core\home.html:223
+msgid "Honest AI"
+msgstr "ایماندار اے آئی"
+
+#: .\templates\core\home.html:225
+msgid ""
+"When the AI is uncertain, it tells you. Farmers receive transparent "
+"confidence scores and model disagreement warnings — not false certainty."
+msgstr ""
+"جب اے آئی غیر یقینی ہوتا ہے، تو وہ آپ کو بتاتا ہے۔ کسانوں کو شفاف معلومات "
+"ملتی ہیں۔"
+
+#: .\templates\core\home.html:241
+msgid "Simple Process"
+msgstr "سادہ عمل"
+
+#: .\templates\core\home.html:244
+msgid "From Photo to"
+msgstr "تصویر سے لے کر"
+
+#: .\templates\core\home.html:244 .\templates\recommendation\detail.html:161
+msgid "Expert Advice"
+msgstr "ماہر کے مشورے تک"
+
+#: .\templates\core\home.html:244
+msgid "in 4 Steps"
+msgstr "4 مراحل میں"
+
+#: .\templates\core\home.html:257
+#| msgid "Upload"
+msgid "Upload Photo"
+msgstr "تصویر اپ لوڈ کریں"
+
+#: .\templates\core\home.html:258
+msgid "Take a clear photo of your plant leaf and upload it"
+msgstr "اپنے پودے کے پتے کی واضح تصویر لیں اور اسے اپ لوڈ کریں"
+
+#: .\templates\core\home.html:264 .\templates\detection\index.html:120
+msgid "Crop Classification"
+msgstr "فصل کی درجہ بندی"
+
+#: .\templates\core\home.html:265
+#| msgid "EfficientNet-B0 identifies your plant type"
+msgid "EfficientNet-B0 identifies the crop type automatically"
+msgstr "EfficientNet-B0 فصل کی قسم خود بخود پہچانتا ہے"
+
+#: .\templates\core\home.html:272
+msgid "Ensemble AI model detects and names the disease"
+msgstr "اے آئی ماڈل بیماری کی تشخیص کرتا ہے اور اس کا نام بتاتا ہے"
+
+#: .\templates\core\home.html:279
+msgid "Get treatment, prevention, and farming advice instantly"
+msgstr "علاج، بچاؤ اور کاشتکاری کے مشورے فوراً حاصل کریں"
+
+#: .\templates\core\home.html:294
+msgid "Start Today"
+msgstr "آج ہی شروع کریں"
+
+#: .\templates\core\home.html:297
+msgid "Ready to Protect Your Harvest?"
+msgstr "اپنی فصل کی حفاظت کے لیے تیار ہیں؟"
+
+#: .\templates\core\home.html:300
+msgid ""
+"Join farmers across Pakistan using AI to catch diseases early, reduce crop "
+"loss, and grow with confidence."
+msgstr ""
+"ابتدائی بیماریوں کا پتہ لگانے اور فصلوں کے نقصان کو کم کرنے کے لیے اے آئی "
+"استعمال کرنے والے کسانوں میں شامل ہوں۔"
+
+#: .\templates\core\home.html:305
+msgid "Create Free Account"
+msgstr "مفت اکاؤنٹ بنائیں"
+
+#: .\templates\core\home.html:310
+#| msgid "Start First Scan"
+msgid "Start a New Scan"
+msgstr "نیا اسکین شروع کریں"
+
+#: .\templates\dashboard\index.html:12
+msgid "Welcome back"
+msgstr "خوش آمدید"
+
+#: .\templates\dashboard\index.html:15
+msgid "Here's a summary of your crop disease detection activity."
+msgstr "یہاں آپ کی فصل کی بیماریوں کی تشخیص کی سرگرمی کا خلاصہ ہے۔"
+
+#: .\templates\dashboard\index.html:36
+msgid "Healthy Plants"
+msgstr "صحت مند پودے"
+
+#: .\templates\dashboard\index.html:43
+msgid "Diseases Found"
+msgstr "بیماریاں پائی گئیں"
+
+#: .\templates\dashboard\index.html:50
+msgid "High Confidence"
+msgstr "اعلی اعتماد"
+
+#: .\templates\dashboard\index.html:59
+msgid "Quick Actions"
+msgstr "فوری اقدامات"
+
+#: .\templates\dashboard\index.html:81 .\templates\detection\index.html:248
+msgid "Recent Scans"
+msgstr "حالیہ اسکین"
+
+#: .\templates\dashboard\index.html:84 .\templates\detection\index.html:250
+msgid "View All"
+msgstr "سب دیکھیں"
+
+#: .\templates\dashboard\index.html:91 .\templates\detection\result.html:112
+msgid "Date"
+msgstr "تاریخ"
+
+#: .\templates\dashboard\index.html:92 .\templates\detection\result.html:104
+#: .\templates\history\list.html:108
+msgid "Crop"
+msgstr "فصل"
+
+#: .\templates\dashboard\index.html:93 .\templates\history\list.html:219
+msgid "Result"
+msgstr "نتیجہ"
+
+#: .\templates\dashboard\index.html:94 .\templates\history\list.html:117
+msgid "Confidence"
+msgstr "اعتماد"
+
+#: .\templates\dashboard\index.html:95
+msgid "Action"
+msgstr "کارروائی"
+
+#: .\templates\dashboard\index.html:113 .\templates\history\list.html:178
+#: .\templates\recommendation\detail.html:126
+msgid "Healthy"
+msgstr "صحت مند"
+
+#: .\templates\dashboard\index.html:116
+msgid "Uncertain"
+msgstr "غیر یقینی"
+
+#: .\templates\dashboard\index.html:123
+msgid "Processing"
+msgstr "عمل جاری ہے"
+
+#: .\templates\dashboard\index.html:141
+msgid "View"
+msgstr "دیکھیں"
+
+#: .\templates\dashboard\index.html:158
+msgid "No scans yet"
+msgstr "ابھی تک کوئی اسکین نہیں"
+
+#: .\templates\dashboard\index.html:160
+msgid "Upload your first crop image to get started with AI disease detection."
+msgstr ""
+"اے آئی بیماری کی تشخیص کے ساتھ شروع کرنے کے لیے اپنی پہلی فصل کی تصویر اپ "
+"لوڈ کریں۔"
+
+#: .\templates\dashboard\index.html:163 .\templates\history\list.html:297
+msgid "Start First Scan"
+msgstr "پہلا اسکین شروع کریں"
+
+#: .\templates\detection\index.html:14
+msgid "Plant Disease Detection"
+msgstr "پودوں کی بیماری کی تشخیص"
+
+#: .\templates\detection\index.html:15
+msgid "Upload a leaf image to identify diseases using AI"
+msgstr ""
+"اے آئی کا استعمال کرتے ہوئے بیماریوں کی شناخت کے لیے پتے کی تصویر اپ لوڈ "
+"کریں"
+
+#: .\templates\detection\index.html:27
+msgid "Upload Crop Image"
+msgstr "فصل کی تصویر اپ لوڈ کریں"
+
+#: .\templates\detection\index.html:29
+msgid "Supports PNG, JPG, JPEG — max 5MB"
+msgstr "PNG, JPG, JPEG معاون ہیں — زیادہ سے زیادہ 5MB"
+
+#: .\templates\detection\index.html:36
+msgid "Click or drag to upload image"
+msgstr "تصویر اپ لوڈ کرنے کے لیے کلک کریں یا ڈریگ کریں"
+
+#: .\templates\detection\index.html:44
+msgid "Drag & drop your leaf image here"
+msgstr "اپنے پتے کی تصویر یہاں ڈریگ اور ڈراپ کریں"
+
+#: .\templates\detection\index.html:47
+msgid "or click to browse files"
+msgstr "یا فائلیں براؤز کرنے کے لیے کلک کریں"
+
+#: .\templates\detection\index.html:77
+msgid "Analyze Image"
+msgstr "تصویر کا تجزیہ کریں"
+
+#: .\templates\detection\index.html:81
+msgid "Clear"
+msgstr "صاف کریں"
+
+#: .\templates\detection\index.html:92
+msgid "What Happens Next"
+msgstr "آگے کیا ہوگا"
+
+#: .\templates\detection\index.html:111
+msgid "Upload"
+msgstr "اپ لوڈ کریں"
+
+#: .\templates\detection\index.html:112
+msgid "Select a clear photo of the affected leaf"
+msgstr "متاثرہ پتے کی واضح تصویر منتخب کریں"
+
+#: .\templates\detection\index.html:121
+msgid "EfficientNet-B0 identifies your plant type"
+msgstr "EfficientNet-B0 آپ کے پودے کی قسم کی شناخت کرتا ہے"
+
+#: .\templates\detection\index.html:130
+msgid "EfficientNet + YOLOv8 ensemble detects any disease"
+msgstr "EfficientNet اور YOLOv8 مل کر کسی بھی بیماری کی نشاندہی کرتے ہیں"
+
+#: .\templates\detection\index.html:138
+#: .\templates\recommendation\detail.html:4
+#: .\templates\recommendation\detail.html:81
+msgid "AI Recommendations"
+msgstr "اے آئی کی سفارشات"
+
+#: .\templates\detection\index.html:139
+msgid "RAG system generates personalized treatment advice"
+msgstr "RAG نظام ذاتی علاج کا مشورہ تیار کرتا ہے"
+
+#: .\templates\detection\index.html:155
+msgid "Tips for Best Results"
+msgstr "بہترین نتائج کے لیے تجاویز"
+
+#: .\templates\detection\index.html:160
+msgid "Use good natural lighting — avoid shadows on the leaf"
+msgstr "اچھی قدرتی روشنی استعمال کریں — پتے پر سائے سے بچیں"
+
+#: .\templates\detection\index.html:164
+msgid "Make the affected area clearly visible in the frame"
+msgstr "متاثرہ حصے کو فریم میں واضح طور پر نمایاں کریں"
+
+#: .\templates\detection\index.html:168
+msgid "Avoid blurry or out-of-focus photos"
+msgstr "دھندلی تصویروں سے پرہیز کریں"
+
+#: .\templates\detection\index.html:172
+msgid "A single leaf against a plain background works best"
+msgstr "سادہ پس منظر میں ایک پتا بہترین کام کرتا ہے"
+
+#: .\templates\detection\index.html:183
+msgid "Supported Crops & Diseases"
+msgstr "معاون فصلیں اور بیماریاں"
+
+#: .\templates\detection\index.html:219
+msgid "AI Models Used"
+msgstr "استعمال ہونے والے اے آئی ماڈلز"
+
+#: .\templates\detection\index.html:351
+msgid "Only PNG, JPG, JPEG, JFIF, and WEBP images are allowed."
+msgstr "صرف PNG, JPG, JPEG, JFIF اور WEBP تصاویر کی اجازت ہے۔"
+
+#: .\templates\detection\index.html:356
+msgid "File size must not exceed 10 MB."
+msgstr "فائل کا سائز 10 ایم بی سے زیادہ نہیں ہونا چاہیے۔"
+
+#: .\templates\detection\index.html:399
+msgid "Please select an image before analyzing."
+msgstr "براہ کرم تجزیہ کرنے سے پہلے ایک تصویر منتخب کریں۔"
+
+#: .\templates\detection\index.html:403
+msgid "Analyzing your crop image..."
+msgstr "آپ کی فصل کی تصویر کا تجزیہ ہو رہا ہے..."
+
+#: .\templates\detection\index.html:404
+msgid "Running AI classification and disease detection"
+msgstr "اے آئی درجہ بندی اور بیماری کی تشخیص جاری ہے"
+
+#: .\templates\detection\result.html:4
+#: .\templates\recommendation\detail.html:413
+msgid "Detection Result"
+msgstr "تشخیص کا نتیجہ"
+
+#: .\templates\detection\result.html:68
+msgid "Analysis Result"
+msgstr "تجزیہ کا نتیجہ"
+
+#: .\templates\detection\result.html:69
+msgid "AI-powered disease detection complete"
+msgstr "اے آئی سے چلنے والی بیماری کی تشخیص مکمل ہو گئی"
+
+#: .\templates\detection\result.html:78
+msgid "Models disagreed on this prediction"
+msgstr "اس پیشین گوئی پر ماڈلز متفق نہیں ہیں"
+
+#: .\templates\detection\result.html:80
+#, python-format
+msgid ""
+"\n"
+"            EfficientNet suggests \"%(a)s\" while YOLOv8 suggests \"%(b)s\".\n"
+"            Treat this as uncertain and consult a local agricultural expert.\n"
+"            "
+msgstr ""
+
+#: .\templates\detection\result.html:97
+msgid "Uploaded Image"
+msgstr "اپ لوڈ کی گئی تصویر"
+
+#: .\templates\detection\result.html:99
+msgid "Scanned leaf image"
+msgstr "اسکین کی گئی پتے کی تصویر"
+
+#: .\templates\detection\result.html:108
+msgid "Scan Time"
+msgstr "اسکین کا وقت"
+
+#: .\templates\detection\result.html:123
+msgid "Visual Diagnosis"
+msgstr "بصری تشخیص"
+
+#: .\templates\detection\result.html:126
+msgid ""
+"Left: original | Center: AI attention | Right: approximate affected area"
+msgstr "بائیں: اصل | درمیان: اے آئی کی توجہ | دائیں: تخمینہ شدہ متاثرہ حصہ"
+
+#: .\templates\detection\result.html:128
+msgid "Grad-CAM analysis"
+msgstr "Grad-CAM تجزیہ"
+
+#: .\templates\detection\result.html:131
+msgid "This shows where the AI focused — not a precise lesion boundary."
+msgstr "یہ دکھاتا ہے کہ اے آئی نے کہاں توجہ مرکوز کی - نہ کہ درست زخم کی حد۔"
+
+#: .\templates\detection\result.html:150
+msgid "Healthy Plant Detected!"
+msgstr "صحت مند پودا پایا گیا!"
+
+#: .\templates\detection\result.html:152
+msgid ""
+"Your crop appears to be in good health. Continue regular monitoring and "
+"maintenance."
+msgstr ""
+"آپ کی فصل اچھی صحت میں نظر آ رہی ہے۔ باقاعدہ نگرانی اور دیکھ بھال جاری "
+"رکھیں۔"
+
+#: .\templates\detection\result.html:164
+msgid ""
+"Uncertain diagnosis — two models disagreed. Expert consultation recommended."
+msgstr ""
+"غیر یقینی تشخیص - دو ماڈل متفق نہیں ہوئے۔ ماہر سے مشورہ کرنے کی سفارش کی "
+"جاتی ہے۔"
+
+#: .\templates\detection\result.html:176
+msgid ""
+"Disease detected. Review the recommendations below for treatment guidance."
+msgstr ""
+"بیماری کی نشاندہی ہوئی۔ علاج کی رہنمائی کے لیے نیچے دی گئی سفارشات کا جائزہ "
+"لیں۔"
+
+#: .\templates\detection\result.html:188
+msgid "Confidence Score"
+msgstr "اعتماد کا اسکور"
+
+#: .\templates\detection\result.html:216
+msgid "Model Breakdown"
+msgstr "ماڈل کی تفصیلات"
+
+#: .\templates\detection\result.html:241
+msgid "Models disagreed — ensemble result shown above as final decision."
+msgstr ""
+"ماڈل متفق نہیں - مشترکہ نتیجہ حتمی فیصلے کے طور پر اوپر دکھایا گیا ہے۔"
+
+#: .\templates\detection\result.html:244
+msgid "Both models agree — high confidence ensemble result."
+msgstr "دونوں ماڈل متفق ہیں - اعلی اعتماد کا مشترکہ نتیجہ۔"
+
+#: .\templates\detection\result.html:258
+msgid "Disease Information"
+msgstr "بیماری کی معلومات"
+
+#: .\templates\detection\result.html:265
+#: .\templates\recommendation\detail.html:173
+msgid "Symptoms"
+msgstr "علامات"
+
+#: .\templates\detection\result.html:277
+msgid "View Full AI Recommendations"
+msgstr "مکمل اے آئی سفارشات دیکھیں"
+
+#: .\templates\detection\result.html:282
+#: .\templates\recommendation\detail.html:410
+msgid "View History"
+msgstr "تاریخ دیکھیں"
+
+#: .\templates\history\list.html:85
+msgid "scan"
+msgstr "اسکین"
+
+#: .\templates\history\list.html:85
+msgid "in your history"
+msgstr "آپ کی تاریخ میں"
+
+#: .\templates\history\list.html:87
+msgid "Your complete plant disease detection history"
+msgstr "آپ کی پودوں کی بیماری کی تشخیص کی مکمل تاریخ"
+
+#: .\templates\history\list.html:102
+msgid "Search"
+msgstr "تلاش کریں"
+
+#: .\templates\history\list.html:104
+msgid "Search notes or tags…"
+msgstr "نوٹس یا ٹیگز تلاش کریں..."
+
+#: .\templates\history\list.html:110
+msgid "All Crops"
+msgstr "تمام فصلیں"
+
+#: .\templates\history\list.html:111
+msgid "Mango"
+msgstr "آم"
+
+#: .\templates\history\list.html:112
+msgid "Onion"
+msgstr "پیاز"
+
+#: .\templates\history\list.html:113
+msgid "Sugarcane"
+msgstr "گنا"
+
+#: .\templates\history\list.html:119
+msgid "All Levels"
+msgstr "تمام سطحیں"
+
+#: .\templates\history\list.html:120
+msgid "High"
+msgstr "اعلی"
+
+#: .\templates\history\list.html:121
+msgid "Medium"
+msgstr "درمیانی"
+
+#: .\templates\history\list.html:122
+msgid "Low"
+msgstr "کم"
+
+#: .\templates\history\list.html:126
+msgid "Disease"
+msgstr "بیماری"
+
+#: .\templates\history\list.html:128
+msgid "e.g. Anthracnose"
+msgstr "مثال کے طور پر اینتھراکنوز"
+
+#: .\templates\history\list.html:152
+msgid "Crop scan"
+msgstr "فصل کا اسکین"
+
+#: .\templates\history\list.html:186
+msgid "Unknown"
+msgstr "نامعلوم"
+
+#: .\templates\history\list.html:224
+msgid "Advice"
+msgstr "مشورہ"
+
+#: .\templates\history\list.html:229 .\templates\history\list.html:328
+msgid "Delete"
+msgstr "حذف کریں"
+
+#: .\templates\history\list.html:278
+msgid "No scans match your filters"
+msgstr "کوئی اسکین آپ کے فلٹرز سے مماثل نہیں ہے"
+
+#: .\templates\history\list.html:280
+msgid "No scan history yet"
+msgstr "ابھی تک کوئی اسکین کی تاریخ نہیں"
+
+#: .\templates\history\list.html:285
+msgid "Try clearing the filters to see all your scans."
+msgstr "اپنے تمام اسکین دیکھنے کے لیے فلٹرز کو صاف کرنے کی کوشش کریں۔"
+
+#: .\templates\history\list.html:287
+msgid "Upload a crop image to start building your disease detection history."
+msgstr ""
+"اپنی بیماری کی تشخیص کی تاریخ بنانا شروع کرنے کے لیے فصل کی تصویر اپ لوڈ "
+"کریں۔"
+
+#: .\templates\history\list.html:293
+msgid "Clear Filters"
+msgstr "فلٹرز صاف کریں"
+
+#: .\templates\history\list.html:312
+msgid "Delete Scan?"
+msgstr "کیا اسکین کو حذف کر دیں؟"
+
+#: .\templates\history\list.html:317
+msgid ""
+"This will permanently delete the scan image, detection result, and any "
+"recommendations. This action cannot be undone."
+msgstr ""
+"یہ اسکین کی تصویر، تشخیص کے نتائج، اور کسی بھی سفارش کو مستقل طور پر حذف کر "
+"دے گا۔ اس عمل کو کالعدم نہیں کیا جا سکتا۔"
+
+#: .\templates\history\list.html:324
+msgid "Cancel"
+msgstr "منسوخ کریں"
+
+#: .\templates\recommendation\detail.html:82
+msgid "Expert guidance powered by Retrieval-Augmented Generation"
+msgstr "Retrieval-Augmented Generation سے چلنے والی ماہرانہ رہنمائی"
+
+#: .\templates\recommendation\detail.html:92
+msgid ""
+"Showing knowledge-base guidance directly — AI language model unavailable "
+"right now."
+msgstr ""
+"معلومات کے ذخیرے کی رہنمائی براہ راست دکھا رہا ہے — اے آئی زبان کا ماڈل فی "
+"الحال دستیاب نہیں ہے۔"
+
+#: .\templates\recommendation\detail.html:109
+msgid "Healthy Plant"
+msgstr "صحت مند پودا"
+
+#: .\templates\recommendation\detail.html:114
+msgid "Urgent Action"
+msgstr "فوری کارروائی"
+
+#: .\templates\recommendation\detail.html:118
+msgid "Moderate"
+msgstr "درمیانہ"
+
+#: .\templates\recommendation\detail.html:122
+msgid "Monitor"
+msgstr "نگرانی کریں"
+
+#: .\templates\recommendation\detail.html:137
+msgid "confidence"
+msgstr "اعتماد"
+
+#: .\templates\recommendation\detail.html:143
+msgid "Detection"
+msgstr "تشخیص"
+
+#: .\templates\recommendation\detail.html:150
+msgid "Overview"
+msgstr "جائزہ"
+
+#: .\templates\recommendation\detail.html:154
+msgid "Treatment"
+msgstr "علاج"
+
+#: .\templates\recommendation\detail.html:157
+msgid "Prevention"
+msgstr "روک تھام"
+
+#: .\templates\recommendation\detail.html:184
+msgid "Causes"
+msgstr "اسباب"
+
+#: .\templates\recommendation\detail.html:195
+msgid "Severity Assessment"
+msgstr "شدت کا اندازہ"
+
+#: .\templates\recommendation\detail.html:205
+msgid "Your plant appears healthy! No disease symptoms or causes to report."
+msgstr ""
+"آپ کا پودا صحت مند نظر آتا ہے! اطلاع دینے کے لیے بیماری کی کوئی علامات یا "
+"اسباب نہیں ہیں۔"
+
+#: .\templates\recommendation\detail.html:221
+msgid "Organic Treatment"
+msgstr "نامیاتی علاج"
+
+#: .\templates\recommendation\detail.html:232
+msgid "Chemical Treatment"
+msgstr "کیمیائی علاج"
+
+#: .\templates\recommendation\detail.html:242
+msgid ""
+"Treatment details will be available once the disease knowledge base is "
+"updated for this condition."
+msgstr ""
+"اس حالت کے لیے بیماری کے معلومات کے ذخیرے کو اپ ڈیٹ کرنے کے بعد علاج کی "
+"تفصیلات دستیاب ہوں گی۔"
+
+#: .\templates\recommendation\detail.html:250
+msgid ""
+"Always consult a certified agricultural officer before applying pesticides "
+"or fertilizers. Dosages vary by region and crop stage."
+msgstr ""
+"کیڑے مار ادویات یا کھاد ڈالنے سے پہلے ہمیشہ ایک مصدقہ زرعی افسر سے رجوع "
+"کریں۔ خوراک علاقے اور فصل کے مرحلے کے لحاظ سے مختلف ہوتی ہے۔"
+
+#: .\templates\recommendation\detail.html:262
+msgid "Prevention Strategies"
+msgstr "روک تھام کی حکمت عملی"
+
+#: .\templates\recommendation\detail.html:271
+msgid ""
+"Prevention details are not yet available for this disease in our knowledge "
+"base."
+msgstr ""
+"اس بیماری سے بچاؤ کی تفصیلات ابھی ہمارے علم کے ذخیرے میں دستیاب نہیں ہیں۔"
+
+#: .\templates\recommendation\detail.html:281
+msgid "General Best Practices"
+msgstr "عام بہترین طرز عمل"
+
+#: .\templates\recommendation\detail.html:295
+msgid "Use certified disease-free seeds or planting material."
+msgstr "مصدقہ بیماری سے پاک بیج یا پودے لگانے کا مواد استعمال کریں۔"
+
+#: .\templates\recommendation\detail.html:301
+msgid "Maintain proper field sanitation and remove infected plant debris."
+msgstr "کھیت کی مناسب صفائی برقرار رکھیں اور متاثرہ پودوں کا ملبہ ہٹا دیں۔"
+
+#: .\templates\recommendation\detail.html:307
+msgid "Ensure adequate spacing to promote air circulation."
+msgstr "ہوا کی گردش کو فروغ دینے کے لیے مناسب فاصلہ یقینی بنائیں۔"
+
+#: .\templates\recommendation\detail.html:313
+msgid "Monitor crops regularly for early signs of disease."
+msgstr "بیماری کی ابتدائی علامات کے لیے فصلوں کی باقاعدگی سے نگرانی کریں۔"
+
+#: .\templates\recommendation\detail.html:319
+msgid "Avoid overwatering — maintain balanced irrigation."
+msgstr "ضرورت سے زیادہ پانی دینے سے گریز کریں - متوازن آبپاشی برقرار رکھیں۔"
+
+#: .\templates\recommendation\detail.html:325
+msgid "Apply balanced fertilizers to strengthen plant immunity."
+msgstr "پودوں کی قوت مدافعت کو مضبوط کرنے کے لیے متوازن کھادیں استعمال کریں۔"
+
+#: .\templates\recommendation\detail.html:345
+msgid "When to Consult an Expert"
+msgstr "ماہر سے کب رجوع کریں"
+
+#: .\templates\recommendation\detail.html:359
+msgid "Pakistan Agricultural Extension Services"
+msgstr "پاکستان زرعی توسیعی خدمات"
+
+#: .\templates\recommendation\detail.html:361
+msgid ""
+"Contact your local agricultural extension officer for confirmed diagnosis, "
+"exact dosages, and field-specific advice. This AI tool supports — but does "
+"not replace — expert agricultural guidance."
+msgstr ""
+"تصدیق شدہ تشخیص، درست خوراک، اور کھیت سے متعلق مشورے کے لیے اپنے مقامی زرعی "
+"توسیعی افسر سے رابطہ کریں۔ یہ اے آئی ٹول ماہرانہ زرعی رہنمائی کی حمایت کرتا "
+"ہے — لیکن اس کی جگہ نہیں لیتا۔"
+
+#: .\templates\recommendation\detail.html:376
+msgid "Additional Notes"
+msgstr "اضافی نوٹس"
+
+#: .\templates\recommendation\detail.html:386
+msgid "Was This Helpful?"
+msgstr "کیا یہ مددگار تھا؟"
+
+#: .\templates\recommendation\detail.html:387
+msgid "Your feedback helps us improve our recommendations."
+msgstr "آپ کی رائے ہماری سفارشات کو بہتر بنانے میں مدد کرتی ہے۔"
+
+#: .\templates\recommendation\detail.html:391
+msgid "Thank you for your feedback!"
+msgstr "آپ کی رائے کا شکریہ!"
+
+#: .\templates\recommendation\detail.html:396
+#: .\templates\recommendation\feedback_form.html:10
+msgid "Submit Feedback"
+msgstr "رائے جمع کرائیں"
+
+#: .\templates\recommendation\detail.html:398
+msgid "Takes less than 30 seconds"
+msgstr "30 سیکنڈ سے کم وقت لگتا ہے"
+
+#: .\templates\recommendation\detail.html:407
+msgid "New Detection"
+msgstr "نئی تشخیص"
+
+#: .\templates\recommendation\detail.html:424
+msgid "No Recommendation Available"
+msgstr "کوئی سفارش دستیاب نہیں"
+
+#: .\templates\recommendation\detail.html:425
+msgid ""
+"Please complete a disease detection scan first to get AI recommendations."
+msgstr ""
+"اے آئی کی سفارشات حاصل کرنے کے لیے براہ کرم پہلے بیماری کی تشخیص کا اسکین "
+"مکمل کریں۔"
+
+#: .\templates\recommendation\detail.html:427
+msgid "Go to Detection"
+msgstr "تشخیص پر جائیں"
+
+msgid "Crop Services"
+msgstr "فصلوں کی خدمات"
+
+msgid "Scan Crop"
+msgstr "فصل اسکین کریں"
+
+msgid "Sign In"
+msgstr "سائن ان کریں"
+
+msgid "Welcome back"
+msgstr "خوش آمدید"
+
+msgid "Farmer Dashboard"
+msgstr "کسان ڈیش بورڈ"
+
+msgid ""
+"Summary of your precision crop health diagnostics and active "
+"recommendations."
+msgstr "آپ کی فصل کی صحت کی تشخیص اور فعال سفارشات کا خلاصہ۔"
+
+msgid "Scan New Leaf"
+msgstr "نیا پتہ اسکین کریں"
+
+msgid "Healthy Plants"
+msgstr "صحت مند پودے"
+
+msgid "High Confidence"
+msgstr "اعلیٰ اعتماد"
+
+msgid "Crop Diagnostic Distribution"
+msgstr "فصلوں کی تشخیصی تقسیم"
+
+msgid "Crop Health vs Disease Ratio"
+msgstr "فصل کی صحت اور بیماری کا تناسب"
+
+msgid "Recent Crop Diagnostics"
+msgstr "حالیہ فصل کی تشخیص"
+
+msgid "View Full History"
+msgstr "مکمل تاریخ دیکھیں"
+
+msgid "Date"
+msgstr "تاریخ"
+
+msgid "Crop"
+msgstr "فصل"
+
+msgid "Condition Diagnosis"
+msgstr "حالت کی تشخیص"
+
+msgid "Confidence"
+msgstr "اعتماد"
+
+msgid "Action"
+msgstr "عمل"
+
+msgid "Healthy"
+msgstr "صحت مند"
+
+msgid "Processing"
+msgstr "پراسیس ہو رہا ہے"
+
+msgid "View Report"
+msgstr "رپورٹ دیکھیں"
+
+msgid "No Crop Scans Yet"
+msgstr "ابھی تک کوئی اسکین نہیں ہے"
+
+msgid ""
+"Upload your first crop leaf image to receive automated disease diagnosis and"
+" 7-day action plans."
+msgstr ""
+"خودکار بیماری کی تشخیص اور 7 روزہ ایکشن پلان حاصل کرنے کے لیے اپنے پتے کی "
+"پہلی تصویر اپ لوڈ کریں۔"
+
+msgid "Start First Scan"
+msgstr "پہلا اسکین شروع کریں"
+
+msgid "AI Crop Health & Disease Scanner"
+msgstr "اے آئی کراپ ہیلتھ اور بیماری کا اسکینر"
+
+msgid "Three-Stage Neural Diagnostic Pipeline"
+msgstr "تین مرحلہ نیورل تشخیصی پائپ لائن"
+
+msgid ""
+"Upload a leaf photo to classify your crop, detect plant disease, and "
+"generate evidence-based recommendations."
+msgstr ""
+"اپنی فصل کی درجہ بندی، پودوں کی بیماری کی شناخت، اور مستند سفارشات حاصل کرنے"
+" کے لیے پتے کی تصویر اپ لوڈ کریں۔"
+
+msgid "Upload Crop Image"
+msgstr "فصل کی تصویر اپ لوڈ کریں"
+
+msgid "Supports JPG, PNG, WebP (Max 10MB)"
+msgstr "جے پی جی، پی این جی، ویب پی (زیادہ سے زیادہ 10MB)"
+
+msgid "Drag & drop your leaf image here"
+msgstr "اپنے پتے کی تصویر یہاں کھینچ کر لائیں"
+
+msgid "or click anywhere in this box to browse files"
+msgstr "یا فائلز تلاش کرنے کے لیے یہاں کلک کریں"
+
+msgid "Run 3-Stage AI Diagnosis"
+msgstr "3 مرحلہ اے آئی تشخیص چلائیں"
+
+msgid "Clear"
+msgstr "صاف کریں"
+
+msgid "Browse Photo from Device"
+msgstr "ڈیوائس سے تصویر منتخب کریں"
+
+msgid "Diagnostic Workflow"
+msgstr "تشخیصی طریقہ کار"
+
+msgid "Crop Identification"
+msgstr "فصل کی شناخت"
+
+msgid "EfficientNet-B0 classifies Onion, Mango, or Sugarcane."
+msgstr "ایفیشنٹ نیٹ پیاز، آم یا گنے کی درجہ بندی کرتا ہے۔"
+
+msgid "Scan Your Crop Leaf"
+msgstr "اپنی فصل کا پتہ اسکین کریں"
+
+msgid "Analyzing leaf photo through our 3-stage neural pipeline..."
+msgstr "3 مرحلہ نیورل پائپ لائن کے ذریعے پتے کی تصویر کا تجزیہ..."
+
+msgid "Disease & Attention Heatmap"
+msgstr "بیماری اور اٹینشن ہیٹ میپ"
+
+msgid "YOLOv8s-cls diagnoses pathogen & computes Grad-CAM overlay."
+msgstr "یولو ماڈل بیماری کی تشخیص کرتا ہے اور فوکس ہیٹ میپ تیار کرتا ہے۔"
+
+msgid "Evidence Recommendations"
+msgstr "مستند سفارشات"
+
+msgid "Retrieves PARC/FAO guidelines & generates a practical 7-day plan."
+msgstr "زرعی کونسل کے رہنما اصول حاصل کرتا ہے اور 7 روزہ پلان بناتا ہے۔"
+
+msgid "Photography Guidelines for Highest Accuracy"
+msgstr "بہترین درستگی کے لیے فوٹو گرافی کے رہنما اصول"
+
+msgid "Capture clear, high-resolution photo in natural daylight."
+msgstr "قدرتی دن کی روشنی میں واضح اور صاف تصویر لیں۔"
+
+msgid "Frame the affected leaf spot or lesion in center focus."
+msgstr "متاثرہ حصے یا دھبے کو تصویر کے مرکز میں رکھیں۔"
+
+msgid "Avoid severe blur, camera shake, or intense dark shadows."
+msgstr "دھندلا پن، کیمرے کے ہلنے اور گہرے سائے سے بچیں۔"
+
+msgid "A single leaf against soil or neutral background gives best results."
+msgstr "مٹی یا سادہ پس منظر میں ایک پتے کی تصویر بہترین نتائج دیتی ہے۔"
+
+msgid "AI-Powered Precision Agriculture"
+msgstr "اے آئی سے چلنے والی جدید زراعت"
+
+msgid "Intelligence & Diagnosis"
+msgstr "ذہانت اور تشخیص"
+
+msgid ""
+"Detect your crop, identify potential diseases, and receive intelligent, "
+"evidence-based recommendations from a single image."
+msgstr ""
+"ایک ہی تصویر سے اپنی فصل کی شناخت کریں، ممکنہ بیماریوں کا پتہ لگائیں، اور "
+"شواہد پر مبنی ذہین سفارشات حاصل کریں۔"
+
+msgid "Upload & Scan Leaf"
+msgstr "پتہ اپ لوڈ اور اسکین کریں"
+
+msgid "My Dashboard"
+msgstr "میرا ڈیش بورڈ"
+
+msgid "Scan Crop Now"
+msgstr "ابھی فصل اسکین کریں"
+
+msgid "Create Free Account"
+msgstr "مفت اکاؤنٹ بنائیں"
+
+msgid "Supported Crops:"
+msgstr "معاون فصلیں:"
+
+msgid "Onion"
+msgstr "پیاز"
+
+msgid "Mango"
+msgstr "آم"
+
+msgid "Sugarcane"
+msgstr "گنا"
+
+msgid "Neural Diagnostic Engine v2.4"
+msgstr "نیورل ڈائیگنوسٹک انجن 2.4"
+
+msgid "Try Interactive Detection Demo"
+msgstr "انٹرایکٹو ڈیمو آزمائیں"
+
+msgid "How It Works"
+msgstr "یہ کیسے کام کرتا ہے"
+
+msgid "Three-Stage AI Crop Protection Pipeline"
+msgstr "تین مرحلہ اے آئی فصل تحفظ پائپ لائن"
+
+msgid ""
+"From a single leaf photo to evidence-backed agronomic guidance in under 5 "
+"seconds."
+msgstr "صرف 5 سیکنڈ کے اندر ایک پتے کی تصویر سے مستند زرعی رہنمائی تک۔"
+
+msgid "Upload & Crop ID"
+msgstr "اپ لوڈ اور فصل کی شناخت"
+
+msgid "Disease & Grad-CAM"
+msgstr "بیماری اور گریڈ کیم"
+
+msgid "Evidence & 7-Day Plan"
+msgstr "شواہد اور 7 روزہ پلان"
+
+msgid "Dedicated Crop Intelligence Modules"
+msgstr "مخصوص فصلوں کے انٹیلی جنس ماڈیولز"
+
+msgid ""
+"Targeted AI models calibrated for Pakistan's most economically vital "
+"agricultural crops."
+msgstr ""
+"پاکستان کی اہم ترین زرعی فصلوں کے لیے خاص طور پر تربیت یافتہ اے آئی ماڈلز۔"
+
+msgid "Onion Intelligence"
+msgstr "پیاز کی انٹیلی جنس"
+
+msgid ""
+"Comprehensive health monitoring from nursery seedlings to bulb expansion. "
+"Detects Downy Mildew, Purple Blotch, Stemphylium Blight, and Bulb Rot early."
+msgstr ""
+"پنیری سے لے کر گانٹھ بننے تک مکمل نگرانی۔ ڈاؤنی ملڈیو، جامنی دھبے اور دیگر "
+"بیماریوں کی جلد تشخیص۔"
+
+msgid "Mango Intelligence"
+msgstr "آم کی انٹیلی جنس"
+
+msgid ""
+"Orchard canopy health and blossom protection. Early diagnosis for "
+"Anthracnose, Quick Decline / Die-Back, Powdery Mildew, and Gall Midge "
+"infestations."
+msgstr ""
+"باغات کی صحت اور پھولوں کا تحفظ۔ اینتھراکنوز، ڈائی بیک، اور سفید پاؤڈر "
+"بیماری کی بروقت تشخیص۔"
+
+msgid "Sugarcane Intelligence"
+msgstr "کماد (گنا) کی انٹیلی جنس"
+
+msgid ""
+"Cane health and sucrose protection. Instant detection of Red Rot ('cane "
+"cancer'), Mosaic Potyvirus, Bacterial Stripe, and Rust pustules."
+msgstr ""
+"کماد کی صحت اور پیداوار کا تحفظ۔ سرخ سڑاند (کینسر)، موزیک وائرس اور دیگر "
+"امراض کی فوری تشخیص۔"
+
+msgid "Scan Onion Leaf"
+msgstr "پیاز کا پتہ اسکین کریں"
+
+msgid "Scan Mango Leaf"
+msgstr "آم کا پتہ اسکین کریں"
+
+msgid "Scan Sugarcane Leaf"
+msgstr "گنے کا پتہ اسکین کریں"
+
+msgid "Grounded & Reliable"
+msgstr "مستند اور قابل اعتماد"
+
+msgid "Evidence-Grounded Agricultural AI"
+msgstr "شواہد پر مبنی زرعی اے آئی"
+
+msgid ""
+"Unlike generic chat models that hallucinate chemical prescriptions, "
+"FasalRehbar AI grounds every recommendation in authoritative research from "
+"the Pakistan Agricultural Research Council (PARC), University of Agriculture"
+" Faisalabad (UAF), and FAO guidelines."
+msgstr ""
+"عام چیٹ ماڈلز کے برعکس، فصل رہبر اے آئی پاکستان زرعی تحقیقاتی کونسل (PARC) "
+"اور زرعی یونیورسٹی فیصل آباد کی مستند تحقیق پر مبنی سفارشات فراہم کرتا ہے۔"
+
+msgid "No Made-Up Dosages"
+msgstr "کوئی من گھڑت ادویات نہیں"
+
+msgid "Bilingual EN / Urdu"
+msgstr "انگریزی اور اردو میں دستیاب"
+
+msgid "Visual Grad-CAM Focus"
+msgstr "بصری اٹینشن فوکس"
+
+msgid "Protect Your Harvest with AI Intelligence"
+msgstr "اے آئی ٹیکنالوجی سے اپنی فصلوں کی حفاظت کریں"
+
+msgid ""
+"Upload a leaf photo now for immediate crop identification, disease "
+"detection, and evidence-grounded action plans."
+msgstr ""
+"فوری فصل کی شناخت، بیماری کی تشخیص اور ایکشن پلان کے لیے ابھی پتے کی تصویر "
+"اپ لوڈ کریں۔"
+
+msgid "Start a Free Scan Now"
+msgstr "ابھی مفت اسکین شروع کریں"
+
+msgid "AI Crop Analysis in Progress"
+msgstr "اے آئی فصل کا تجزیہ جاری ہے"
+
+msgid "Processing leaf sample through our 3-stage neural pipeline..."
+msgstr "ہمارے 3 مرحلہ پائپ لائن کے ذریعے پتے کے نمونے کی پروسیسنگ..."
+
+msgid "01 Uploading and validating high-res leaf image"
+msgstr "01 تصویر اپ لوڈ اور تصدیق کی جا رہی ہے"
+
+msgid "02 Classifying crop (Onion / Mango / Sugarcane)"
+msgstr "02 فصل کی شناخت (پیاز / آم / گنا)"
+
+msgid "03 Running YOLOv8 disease detector & Grad-CAM overlay"
+msgstr "03 بیماری کا پتہ لگانا اور اٹینشن ہیٹ میپ بنانا"
+
+msgid "04 Generating evidence-backed 7-day recommendations"
+msgstr "04 مستند 7 روزہ سفارشات تیار کرنا"
+
+msgid "Scientific Evidence"
+msgstr "سائنسی شواہد"
+
+msgid "Agricultural Extension"
+msgstr "زرعی توسیع"
+
+msgid ""
+"Always consult local certified agricultural officers for on-field chemical "
+"application confirmation."
+msgstr "کھیت میں اسپرے سے پہلے ہمیشہ مقامی مصدقہ زرعی افسران سے مشورہ کریں۔"
+
+msgid "Diagnosis Report"
+msgstr "تشخیصی رپورٹ"
+
+msgid "Healthy Plant"
+msgstr "صحت مند پودا"
+
+msgid "Diagnosed in"
+msgstr "تشخیص مکمل ہوئی"
+
+msgid "View Evidence & 7-Day Plan"
+msgstr "شواہد اور 7 روزہ پلان دیکھیں"
+
+msgid "Diagnostic Uncertainty Notice"
+msgstr "تشخیصی غیریقینی صورتحال کا نوٹس"
+
+msgid "Diagnostic Visual"
+msgstr "تشخیصی تصویر"
+
+msgid "Multi-Layer View"
+msgstr "ملٹی لیئر ویو"
+
+msgid "Original Leaf"
+msgstr "اصل پتہ"
+
+msgid "Grad-CAM AI Attention"
+msgstr "گریڈ کیم اے آئی فوکس"
+
+msgid ""
+"Grad-CAM highlights the exact pixel region focusing the neural network's "
+"diagnosis."
+msgstr ""
+"گریڈ کیم اس مخصوص حصے کو واضح کرتا ہے جس پر ماڈل نے بیماری کی شناخت کی ہے۔"
+
+msgid "Target Crop"
+msgstr "فصل"
+
+msgid "Model Version"
+msgstr "ماڈل ورژن"
+
+msgid "Inference Time"
+msgstr "پراسیسنگ کا وقت"
+
+msgid "Timestamp"
+msgstr "وقت اور تاریخ"
+
+msgid "Crop ID Confidence"
+msgstr "فصل کی شناخت کا اعتماد"
+
+msgid "Disease Confidence"
+msgstr "بیماری کی تشخیص کا اعتماد"
+
+msgid "What This Means for Your Crop"
+msgstr "اس تشخیص کا آپ کی فصل کے لیے کیا مطلب ہے"
+
+msgid "Immediate On-Field Action Steps"
+msgstr "کھیت میں فوری اقدامات"
+
+msgid "Continue regular crop scouting and balanced irrigation."
+msgstr "باقاعدگی سے کھیت کی نگرانی اور مناسب آبپاشی جاری رکھیں۔"
+
+msgid "Open Full 7-Day Plan & Evidence Sources"
+msgstr "مکمل 7 روزہ پلان اور سائنسی شواہد کھولیں"
+
+msgid "History"
+msgstr "تاریخچہ"
+
+msgid "Back to Diagnosis"
+msgstr "تشخیص پر واپس جائیں"
+
+msgid "Select Crop (or Auto-Detect):"
+msgstr "فصل منتخب کریں (یا خودکار شناخت):"
+
+msgid "🤖 Auto-Detect Crop (AI Recommended)"
+msgstr "🤖 فصل کی خودکار شناخت (اے آئی تجویز کردہ)"
+
+msgid "🧅 Onion (پیاز)"
+msgstr "🧅 پیاز (Onion)"
+
+msgid "🥭 Mango (آم)"
+msgstr "🥭 آم (Mango)"
+
+msgid "🌱 Sugarcane (گنا)"
+msgstr "🌱 گنا (Sugarcane)"
+
+msgid "Delete Scan"
+msgstr "اسکین حذف کریں"
+
+msgid "Farmer Helpdesk & Agronomy Support"
+msgstr "کسان ہیلپ ڈیسک اور زرعی معاونت"
+
+msgid "Get in Touch with Our Agronomy Team"
+msgstr "ہماری زرعی ٹیم سے رابطہ کریں"
+
+msgid "Headquarters"
+msgstr "مرکزی دفتر"
+
+msgid "Agronomy Hotline"
+msgstr "زرعی ہاٹ لائن"
+
+msgid "Email Inquiries"
+msgstr "ای میل کے ذریعے رابطہ"
+
+msgid "Send Us a Message"
+msgstr "ہمیں پیغام بھیجیں"
+
+msgid "Send Inquiry"
+msgstr "پیغام بھیجیں"
+
+msgid "Full Name"
+msgstr "پورا نام"
+
+msgid "Email Address"
+msgstr "ای میل ایڈریس"
+
+msgid "Subject / Crop Area"
+msgstr "موضوع / فصل کا شعبہ"
+
+msgid "Your Message"
+msgstr "آپ کا پیغام"
+
+msgid "Advancing Precision Crop Protection Across Pakistan"
+msgstr "پاکستان بھر میں جدید زرعی اور فصلوں کا تحفظ"
+
+msgid "Three-Stage Neural & Grounded Workflow"
+msgstr "3 مرحلہ نیورل اور مستند زرعی طریقہ کار"
+
+msgid "Full-Spectrum Crop Health Intelligence"
+msgstr "فصل کی مکمل صحت اور نگہداشت کی ذہانت"
+
+msgid "Specialized Crop Diagnostics"
+msgstr "خصوصی فصلوں کی تشخیصی خدمات"
+
+msgid "Target Crop Intelligence Solutions"
+msgstr "مخصوص فصلوں کے لیے سمارٹ حل"
+
+msgid "View Crop Solutions"
+msgstr "فصلوں کے حل دیکھیں"
+
+msgid "Explore AI Capabilities"
+msgstr "اے آئی کی خصوصیات دیکھیں"
+
+msgid "Smart Plant Health Diagnosis"
+msgstr "پودوں کی صحت کی جدید تشخیص"
+
+msgid "Upload Leaf Photo"
+msgstr "پتے کی تصویر اپلوڈ کریں"
+
+msgid "Diagnose Plant Health"
+msgstr "پودے کی صحت کی تشخیص کریں"
+
+msgid "Snap or Upload Photo"
+msgstr "تصویر کھینچیں یا اپلوڈ کریں"
+
+msgid "Instant Disease Detection"
+msgstr "بیماری کی فوری تشخیص"
+
+msgid "Step-by-Step Advisory"
+msgstr "مرحلہ وار رہنمائی اور علاج"
+
+msgid "Tips for Best Accuracy"
+msgstr "بہترین نتائج کے لیے تجاویز"
+
+msgid "Simple 3-Step Crop Health Protection"
+msgstr "فصلوں کے تحفظ کے 3 آسان اور سادہ مراحل"
+
+msgid "Disease & Visual Heatmap"
+msgstr "بیماری اور تصویری ہیٹ میپ"
+
+msgid "Practical 7-Day Plan"
+msgstr "7 روزہ عملی منصوبہ"
+
+msgid "Leaf Inspection Visual"
+msgstr "پتے کے معائنے کی تصویر"
+
+msgid "AI Disease Heatmap"
+msgstr "اے آئی بیماری کا ہیٹ میپ"
+
+msgid "The heatmap highlights the exact leaf area showing symptoms of infection."
+msgstr "ہیٹ میپ پتے کے اس مخصوص حصے کو واضح کرتا ہے جہاں بیماری کے اثرات موجود ہیں۔"
+
+msgid "01 Reading and optimizing leaf photo"
+msgstr "01 پتے کی تصویر کا جائزہ لیا جا رہا ہے"
+
+msgid "02 Identifying crop (Onion / Mango / Sugarcane)"
+msgstr "02 فصل کی شناخت کی جا رہی ہے (پیاز / آم / گنا)"
+
+msgid "03 Checking leaf for diseases and symptoms"
+msgstr "03 بیماری اور علامات کی جانچ کی جا رہی ہے"
+
+msgid "04 Preparing personalized care & treatment advisory"
+msgstr "04 مناسب علاج اور رہنمائی تیار کی جا رہی ہے"
+
+msgid "Symptom Visual Heatmaps"
+msgstr "علامات کے تصویری ہیٹ میپس"
+
+msgid "7-Day Recovery Plans"
+msgstr "7 روزہ بحالی کے منصوبے"

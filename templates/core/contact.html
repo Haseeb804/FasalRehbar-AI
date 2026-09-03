@@ -1,75 +1,119 @@
 {% extends "base/base.html" %}
+{% load static i18n %}
 
-{% block title %}Contact Us - FasalRehbar AI{% endblock %}
+{% block title %}{% trans "Contact Support & Agronomy Helpdesk" %} — FasalRehbar AI{% endblock %}
 
 {% block content %}
-<section class="container-lg section-padding">
-    <h1 class="section-title mb-5">Get In <span class="highlight">Touch</span></h1>
+<!-- ══════════════════════════════════════════════════════════════
+     1. CONTACT HERO HEADER
+══════════════════════════════════════════════════════════════ -->
+<section class="hero-master" style="padding: 4.5rem 0 5rem;">
+    <img src="{% static 'images/hero_agri_bg.jpg' %}" alt="Contact Helpdesk" class="hero-backdrop-img">
+    <div class="hero-overlay-gradient"></div>
 
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="fas fa-map-marker-alt fa-2x mb-3" style="color: #2E7D32;"></i>
-                    <h5>Address</h5>
-                    <p class="text-muted">
-                        123 Agricultural Street<br>
-                        Lahore, Pakistan
-                    </p>
-                </div>
-            </div>
+    <div class="container-lg position-relative z-2 text-center max-w-800 mx-auto">
+        <div class="hero-pill-badge mb-3">
+            <i class="fas fa-headset text-emerald-300"></i>
+            <span>{% trans "Farmer Helpdesk & Agronomy Support" %}</span>
         </div>
-        <div class="col-md-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="fas fa-phone fa-2x mb-3" style="color: #2E7D32;"></i>
-                    <h5>Phone</h5>
-                    <p class="text-muted">
-                        +92 (300) 123-4567<br>
-                        Mon-Fri, 9AM-6PM PKT
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <i class="fas fa-envelope fa-2x mb-3" style="color: #2E7D32;"></i>
-                    <h5>Email</h5>
-                    <p style="color: var(--gray-600); margin: 0; line-height: 1.6;">
-                        info@fasalrehbar.ai<br>
-                        support@fasalrehbar.ai
-                    </p>
-                </div>
-            </div>
-        </div>
+        <h1 class="hero-title mb-3">
+            {% trans "Get in Touch with Our Agronomy Team" %}
+        </h1>
+        <p class="hero-subtitle mb-0 mx-auto">
+            {% trans "Have questions about crop disease identification, model diagnostics, or enterprise farming integrations? We are here to help." %}
+        </p>
     </div>
+</section>
 
-    <hr class="my-5">
+<!-- ══════════════════════════════════════════════════════════════
+     2. CONTACT CHANNELS & INTERACTIVE FORM
+══════════════════════════════════════════════════════════════ -->
+<section style="padding: 5.5rem 0; background: var(--white);">
+    <div class="container-lg">
+        <div class="row g-4 mb-5">
+            <!-- Channel 1: Location -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100" style="background: var(--slate-50); border: 1px solid var(--border-light) !important;">
+                    <div class="step-icon-box mx-auto mb-3">
+                        <i class="fas fa-location-dot"></i>
+                    </div>
+                    <h5 class="fw-bold text-slate-900 mb-1">{% trans "Headquarters" %}</h5>
+                    <p class="text-muted small mb-0" style="line-height: 1.6;">
+                        {% trans "Agricultural Technology Center" %}<br>
+                        {% trans "Lahore / Faisalabad, Punjab, Pakistan" %}
+                    </p>
+                </div>
+            </div>
 
-    <div class="row">
-        <div class="col-md-8 mx-auto">
-            <h3 class="mb-4">Send us a Message</h3>
-            <form method="post">
-                {% csrf_token %}
-                <div class="mb-3">
-                    <label for="name" class="form-label">Full Name</label>
-                    <input type="text" class="form-control" id="name" name="name" required>
+            <!-- Channel 2: Phone Hotline -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100" style="background: var(--slate-50); border: 1px solid var(--border-light) !important;">
+                    <div class="step-icon-box mx-auto mb-3" style="background: var(--sky-100); color: var(--sky-600);">
+                        <i class="fas fa-phone-volume"></i>
+                    </div>
+                    <h5 class="fw-bold text-slate-900 mb-1">{% trans "Agronomy Hotline" %}</h5>
+                    <p class="text-muted small mb-0" style="line-height: 1.6;">
+                        <strong>+92 (300) 123-4567</strong><br>
+                        {% trans "Monday – Saturday, 8:00 AM – 6:00 PM PKT" %}
+                    </p>
                 </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+
+            <!-- Channel 3: Email Support -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100" style="background: var(--slate-50); border: 1px solid var(--border-light) !important;">
+                    <div class="step-icon-box mx-auto mb-3" style="background: var(--violet-100); color: var(--violet-600);">
+                        <i class="fas fa-envelope-open-text"></i>
+                    </div>
+                    <h5 class="fw-bold text-slate-900 mb-1">{% trans "Email Inquiries" %}</h5>
+                    <p class="text-muted small mb-0" style="line-height: 1.6;">
+                        <strong>support@fasalrehbar.ai</strong><br>
+                        <strong>info@fasalrehbar.ai</strong>
+                    </p>
                 </div>
-                <div class="mb-3">
-                    <label for="subject" class="form-label">Subject</label>
-                    <input type="text" class="form-control" id="subject" name="subject" required>
+            </div>
+        </div>
+
+        <!-- Contact Form Box -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="p-4 p-md-5 bg-white rounded-4 border shadow-sm">
+                    <div class="text-center mb-4">
+                        <span class="badge bg-success-subtle text-success px-3 py-1 rounded-pill small fw-bold text-uppercase">
+                            <i class="fas fa-paper-plane me-1"></i> {% trans "Direct Inquiry" %}
+                        </span>
+                        <h3 class="fw-bold text-slate-900 mt-2 mb-1">{% trans "Send Us a Message" %}</h3>
+                        <p class="text-muted small">{% trans "Our agricultural intelligence team typically responds within 24 hours." %}</p>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label small fw-bold text-slate-700">{% trans "Full Name" %}</label>
+                                <input type="text" class="form-control py-2 px-3" id="name" name="name" placeholder="Muhammad Ali" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label small fw-bold text-slate-700">{% trans "Email Address" %}</label>
+                                <input type="email" class="form-control py-2 px-3" id="email" name="email" placeholder="ali@example.com" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="subject" class="form-label small fw-bold text-slate-700">{% trans "Subject / Crop Area" %}</label>
+                                <input type="text" class="form-control py-2 px-3" id="subject" name="subject" placeholder="{% trans 'e.g. Mango orchard diagnosis consultation' %}" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="message" class="form-label small fw-bold text-slate-700">{% trans "Your Message" %}</label>
+                                <textarea class="form-control p-3" id="message" name="message" rows="5" placeholder="{% trans 'Describe your farming inquiry, symptoms observed, or collaboration request...' %}" required></textarea>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-hero-primary w-100 py-3 justify-content-center text-decoration-none shadow">
+                                    <i class="fas fa-paper-plane me-2"></i> {% trans "Send Inquiry" %}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <label for="message" class="form-label">Message</label>
-                    <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary btn-lg w-100">Send Message</button>
-            </form>
+            </div>
         </div>
     </div>
 </section>

@@ -4,81 +4,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="FasalRehbar AI — AI-powered plant disease detection for Sugarcane, Onion, and Mango crops. Get instant diagnosis and expert recommendations.">
-    <title>{% block title %}FasalRehbar AI — AI Plant Disease Detection{% endblock %}</title>
+    <meta name="description" content="FasalRehbar AI — AI-Powered Crop Health Intelligence for Onion, Mango, and Sugarcane. Evidence-based disease detection and actionable farming recommendations.">
+    <title>{% block title %}FasalRehbar AI — Crop Health & Disease Intelligence{% endblock %}</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Font Awesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Custom CSS -->
+    <!-- Chart.js for Responsive Visual Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- Custom Master Agriculture Design System -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
     {% block extra_css %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
 
-    <!-- Navigation -->
+    <!-- Modern Glass Navigation -->
     <nav class="pakagri-nav" id="mainNav">
         <div class="nav-container">
-            <a class="nav-brand" href="{% url 'core:home' %}" style="align-items: center;">
-                <div class="brand-icon">
+            <a class="nav-brand" href="{% url 'core:home' %}">
+                <div class="brand-icon-wrapper">
                     <i class="fas fa-seedling"></i>
                 </div>
-                <div style="display: flex; flex-direction: column; justify-content: center;">
-                    <span class="brand-text" style="line-height: 1.1;">FasalRehbar <span class="brand-accent">AI</span></span>
-                    <span dir="rtl" style="font-family: 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', serif; font-size: 0.75rem; color: var(--gray-500); margin-top: 2px; line-height: 1;">ہر پتے کی پہچان، ہر بیماری کا حل — اے آئی کے ساتھ</span>
+                <div class="brand-title">
+                    <span class="brand-main">FasalRehbar <span class="brand-accent">AI</span></span>
+                    <span class="brand-motto" dir="rtl">ہر پتے کی پہچان، ہر بیماری کا حل — اے آئی کے ساتھ</span>
                 </div>
             </a>
 
-            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-                <span></span><span></span><span></span>
+            <button class="nav-toggle-btn" id="navToggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
             </button>
 
             <div class="nav-menu" id="navMenu">
                 <ul class="nav-links">
-                    <li><a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'core:home' %}">{% trans "Home" %}</a></li>
-                    <li><a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'core:about' %}">{% trans "About" %}</a></li>
-                    <li><a class="nav-link {% if request.resolver_match.url_name == 'services' %}active{% endif %}" href="{% url 'core:services' %}">{% trans "Services" %}</a></li>
-                    <li><a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'core:contact' %}">{% trans "Contact" %}</a></li>
+                    <li><a class="nav-link-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'core:home' %}"><i class="fas fa-house"></i> {% trans "Home" %}</a></li>
+                    <li><a class="nav-link-item {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'core:about' %}">{% trans "About" %}</a></li>
+                    <li><a class="nav-link-item {% if request.resolver_match.url_name == 'services' %}active{% endif %}" href="{% url 'core:services' %}">{% trans "Crop Services" %}</a></li>
+                    <li><a class="nav-link-item {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'core:contact' %}">{% trans "Contact" %}</a></li>
+                    
                     {% if user.is_authenticated %}
-                        <li><a class="nav-link {% if 'dashboard' in request.path %}active{% endif %}" href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
+                        <li><a class="nav-link-item {% if 'dashboard' in request.path %}active{% endif %}" href="{% url 'dashboard:index' %}"><i class="fas fa-chart-line"></i> {% trans "Dashboard" %}</a></li>
                         <li>
-                            <a class="nav-btn nav-btn-detect" href="{% url 'detection:index' %}">
-                                <i class="fas fa-microscope"></i> {% trans "Detect Disease" %}
+                            <a class="btn-nav-primary" href="{% url 'detection:index' %}">
+                                <i class="fas fa-microscope"></i> {% trans "Scan Crop" %}
                             </a>
                         </li>
                         <li>
-                            <a class="nav-btn nav-btn-logout" href="{% url 'accounts:account_logout' %}">
-                                <i class="fas fa-sign-out-alt"></i> {% trans "Logout" %}
+                            <a class="nav-link-item" href="{% url 'accounts:account_logout' %}" style="color: var(--rose-600);">
+                                <i class="fas fa-arrow-right-from-bracket"></i>
                             </a>
                         </li>
                     {% else %}
-                        <li><a class="nav-link" href="{% url 'accounts:account_login' %}">{% trans "Login" %}</a></li>
+                        <li><a class="nav-link-item" href="{% url 'accounts:account_login' %}">{% trans "Sign In" %}</a></li>
                         <li>
-                            <a class="nav-btn nav-btn-signup" href="{% url 'accounts:register' %}">
+                            <a class="btn-nav-primary" href="{% url 'accounts:register' %}">
                                 {% trans "Get Started" %} <i class="fas fa-arrow-right"></i>
                             </a>
                         </li>
                     {% endif %}
+
                     <li>
-                        <form action="{% url 'set_language' %}" method="post" class="lang-form">
+                        <form action="{% url 'set_language_custom' %}" method="post" class="d-inline">
                             {% csrf_token %}
                             <input name="next" type="hidden" value="{{ request.get_full_path }}">
                             {% get_current_language as CURRENT_LANGUAGE %}
                             {% if CURRENT_LANGUAGE == "ur" %}
                                 <input type="hidden" name="language" value="en">
-                                <button type="submit" class="lang-btn">English</button>
+                                <button type="submit" class="lang-switch-btn"><i class="fas fa-globe me-1"></i> English</button>
                             {% else %}
                                 <input type="hidden" name="language" value="ur">
-                                <button type="submit" class="lang-btn">اردو</button>
+                                <button type="submit" class="lang-switch-btn" style="font-family: var(--font-urdu); font-size: 0.95rem;">🌐 اردو</button>
                             {% endif %}
                         </form>
                     </li>
@@ -87,185 +92,125 @@
         </div>
     </nav>
 
-    <!-- Flash Messages -->
+    <!-- Flash Notification Messages -->
     {% if messages %}
-    <div class="flash-messages" id="flashMessages">
+    <div class="container-lg mt-3" id="flashMessages">
         {% for message in messages %}
-        <div class="flash-message flash-{{ message.tags }}" role="alert">
-            <div class="flash-content">
-                {% if 'success' in message.tags %}<i class="fas fa-check-circle"></i>
-                {% elif 'error' in message.tags %}<i class="fas fa-times-circle"></i>
-                {% elif 'warning' in message.tags %}<i class="fas fa-exclamation-triangle"></i>
-                {% else %}<i class="fas fa-info-circle"></i>{% endif %}
-                <span>{{ message }}</span>
+        <div class="alert {% if 'success' in message.tags %}alert-success{% elif 'error' in message.tags %}alert-danger{% elif 'warning' in message.tags %}alert-warning{% else %}alert-info{% endif %} alert-dismissible fade show shadow-sm" role="alert" style="border-radius: var(--radius-md);">
+            <div class="d-flex align-items-center gap-2">
+                {% if 'success' in message.tags %}<i class="fas fa-circle-check fs-5 text-success"></i>
+                {% elif 'error' in message.tags %}<i class="fas fa-circle-xmark fs-5 text-danger"></i>
+                {% elif 'warning' in message.tags %}<i class="fas fa-triangle-exclamation fs-5 text-warning"></i>
+                {% else %}<i class="fas fa-circle-info fs-5 text-primary"></i>{% endif %}
+                <div>{{ message }}</div>
             </div>
-            <button class="flash-close" onclick="this.parentElement.remove()" aria-label="Close">
-                <i class="fas fa-times"></i>
-            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         {% endfor %}
     </div>
     {% endif %}
 
-    <!-- Main Content -->
+    <!-- Main Content Injection -->
     <main>
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Global Loading Overlay -->
+    <!-- Global Multi-Stage AI Loading HUD -->
     <div id="pakagri-loading-overlay" role="status" aria-live="polite">
-        <div class="loading-card">
-            <div class="loading-visual">
-                <div class="loading-ring outer"></div>
-                <div class="loading-ring middle"></div>
-                <div class="loading-ring inner"></div>
-                <div class="loading-icon">
-                    <i class="fas fa-seedling"></i>
+        <div class="loading-hud-card">
+            <div class="loading-spinner-ring"></div>
+            <h4 class="fw-bold mb-1" style="color: var(--slate-900);">{% trans "AI Crop Analysis in Progress" %}</h4>
+            <p class="text-muted small mb-3">{% trans "Analyzing leaf photo and checking crop health..." %}</p>
+            
+            <div class="loading-stage-steps">
+                <div class="loading-stage-item active" id="loadingStep1">
+                    <i class="fas fa-cloud-arrow-up"></i>
+                    <span>{% trans "01 Reading and optimizing leaf photo" %}</span>
+                </div>
+                <div class="loading-stage-item" id="loadingStep2">
+                    <i class="fas fa-leaf"></i>
+                    <span>{% trans "02 Identifying crop (Onion / Mango / Sugarcane)" %}</span>
+                </div>
+                <div class="loading-stage-item" id="loadingStep3">
+                    <i class="fas fa-microscope"></i>
+                    <span>{% trans "03 Checking leaf for diseases and symptoms" %}</span>
+                </div>
+                <div class="loading-stage-item" id="loadingStep4">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                    <span>{% trans "04 Preparing personalized care & treatment advisory" %}</span>
                 </div>
             </div>
-            <div class="loading-steps" id="loadingSteps">
-                <div class="loading-step active" id="step1">
-                    <i class="fas fa-upload"></i> Uploading image...
-                </div>
-                <div class="loading-step" id="step2">
-                    <i class="fas fa-brain"></i> Identifying crop...
-                </div>
-                <div class="loading-step" id="step3">
-                    <i class="fas fa-microscope"></i> Detecting disease...
-                </div>
-                <div class="loading-step" id="step4">
-                    <i class="fas fa-lightbulb"></i> Generating recommendations...
-                </div>
-            </div>
-            <div class="pakagri-loading-message" id="pakagri-loading-message">{% trans "Please wait..." %}</div>
-            <div class="pakagri-loading-submessage" id="pakagri-loading-submessage"></div>
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Modern Agriculture Footer -->
     <footer class="site-footer">
         <div class="footer-container">
             <div class="footer-grid">
-                <div class="footer-brand-col">
-                    <div class="footer-brand">
-                        <i class="fas fa-seedling"></i>
-                        <span>FasalRehbar AI</span>
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="brand-icon-wrapper" style="width: 36px; height: 36px; font-size: 1rem;">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <span class="fs-5 fw-bold text-white">FasalRehbar AI</span>
                     </div>
-                    <p>Empowering Pakistani farmers with AI-powered crop disease detection and intelligent recommendations.</p>
-                    <div class="footer-social">
-                        <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    <p class="small text-slate-400 mb-3" style="line-height: 1.7;">
+                        {% trans "Empowering farmers across Pakistan with instant AI plant disease diagnosis, symptom visual heatmaps, and practical crop recovery guidance." %}
+                    </p>
+                    <div class="d-flex gap-2">
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--emerald-300);">🧅 Onion</span>
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--emerald-300);">🥭 Mango</span>
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--emerald-300);">🌱 Sugarcane</span>
                     </div>
                 </div>
 
-                <div class="footer-links-col">
-                    <h6 class="footer-heading">{% trans "Platform" %}</h6>
-                    <ul class="footer-links">
-                        <li><a href="{% url 'core:home' %}">{% trans "Home" %}</a></li>
-                        <li><a href="{% url 'core:about' %}">{% trans "About Us" %}</a></li>
-                        <li><a href="{% url 'core:services' %}">{% trans "Services" %}</a></li>
-                        {% if user.is_authenticated %}
-                        <li><a href="{% url 'detection:index' %}">{% trans "Disease Detection" %}</a></li>
-                        <li><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
-                        {% endif %}
+                <div>
+                    <h6 class="fw-bold text-white mb-3">{% trans "Platform" %}</h6>
+                    <ul class="list-unstyled small d-flex flex-direction-column gap-2" style="display: flex; flex-direction: column; gap: 8px;">
+                        <li><a href="{% url 'core:home' %}" class="text-slate-400">{% trans "Home" %}</a></li>
+                        <li><a href="{% url 'detection:index' %}" class="text-slate-400">{% trans "Crop Disease Scanner" %}</a></li>
+                        <li><a href="{% url 'core:services' %}" class="text-slate-400">{% trans "Supported Diseases" %}</a></li>
+                        <li><a href="{% url 'dashboard:index' %}" class="text-slate-400">{% trans "Farmer Dashboard" %}</a></li>
                     </ul>
                 </div>
 
-                <div class="footer-links-col">
-                    <h6 class="footer-heading">{% trans "Support" %}</h6>
-                    <ul class="footer-links">
-                        <li><a href="{% url 'core:faq' %}">{% trans "FAQ" %}</a></li>
-                        <li><a href="{% url 'core:contact' %}">{% trans "Contact Us" %}</a></li>
-                        <li><a href="{% url 'core:privacy' %}">{% trans "Privacy Policy" %}</a></li>
-                        <li><a href="{% url 'core:terms' %}">{% trans "Terms of Service" %}</a></li>
+                <div>
+                    <h6 class="fw-bold text-white mb-3">{% trans "Scientific Evidence" %}</h6>
+                    <ul class="list-unstyled small d-flex flex-direction-column gap-2" style="display: flex; flex-direction: column; gap: 8px;">
+                        <li><span class="text-slate-400">PARC Guidelines</span></li>
+                        <li><span class="text-slate-400">UAF Plant Pathology</span></li>
+                        <li><span class="text-slate-400">FAO Good Agri Practices</span></li>
+                        <li><span class="text-slate-400">CABI PlantwisePlus</span></li>
                     </ul>
                 </div>
 
-                <div class="footer-links-col">
-                    <h6 class="footer-heading">{% trans "Crops Supported" %}</h6>
-                    <ul class="footer-links crops-list">
-                        <li><i class="fas fa-leaf text-success me-1"></i> Mango</li>
-                        <li><i class="fas fa-leaf text-success me-1"></i> Onion</li>
-                        <li><i class="fas fa-leaf text-success me-1"></i> Sugarcane</li>
-                    </ul>
-                    <div class="footer-badge">
-                        <i class="fas fa-robot"></i>
-                        <span>AI-Powered Detection</span>
+                <div>
+                    <h6 class="fw-bold text-white mb-3">{% trans "Agricultural Extension" %}</h6>
+                    <p class="small text-slate-400 mb-2">
+                        {% trans "Always consult local certified agricultural officers for on-field chemical application confirmation." %}
+                    </p>
+                    <div class="p-2 rounded small" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);">
+                        <i class="fas fa-headset text-emerald-400 me-1"></i> <strong class="text-white">Extension Advisory Hotline:</strong> 0800-12345
                     </div>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; {% now "Y" %} FasalRehbar AI. {% trans "All rights reserved." %}</p>
+                <div>&copy; 2026 FasalRehbar AI — Precision Crop Health Intelligence. All rights reserved.</div>
+                <div class="d-flex gap-3">
+                    <a href="{% url 'core:privacy' %}" class="text-slate-500">{% trans "Privacy Policy" %}</a>
+                    <a href="{% url 'core:terms' %}" class="text-slate-500">{% trans "Terms of Service" %}</a>
+                    <a href="{% url 'core:faq' %}" class="text-slate-500">{% trans "FAQs" %}</a>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Main JS -->
+    <!-- Custom Main JS -->
     <script src="{% static 'js/main.js' %}"></script>
-
-    <script>
-    // Loading overlay function (called from detection/index.html on form submit)
-    function showFasalRehbarLoading(message, submessage) {
-        const overlay = document.getElementById('pakagri-loading-overlay');
-        const msgEl = document.getElementById('pakagri-loading-message');
-        const subEl = document.getElementById('pakagri-loading-submessage');
-
-        if (message && msgEl) msgEl.textContent = message;
-        if (subEl) subEl.textContent = submessage || '';
-        if (overlay) overlay.classList.add('active');
-
-        // Animate the loading steps
-        const steps = ['step1', 'step2', 'step3', 'step4'];
-        let i = 0;
-        const stepInterval = setInterval(() => {
-            steps.forEach((id, idx) => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.classList.remove('active', 'done');
-                    if (idx < i) el.classList.add('done');
-                    else if (idx === i) el.classList.add('active');
-                }
-            });
-            i++;
-            if (i >= steps.length) clearInterval(stepInterval);
-        }, 1800);
-    }
-
-    // Auto-dismiss flash messages after 5 seconds
-    document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(() => {
-            document.querySelectorAll('.flash-message').forEach(el => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateX(20px)';
-                setTimeout(() => el.remove(), 400);
-            });
-        }, 5000);
-
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            const nav = document.getElementById('mainNav');
-            if (nav) {
-                nav.classList.toggle('scrolled', window.scrollY > 20);
-            }
-        });
-
-        // Mobile nav toggle
-        const toggle = document.getElementById('navToggle');
-        const menu = document.getElementById('navMenu');
-        if (toggle && menu) {
-            toggle.addEventListener('click', () => {
-                toggle.classList.toggle('open');
-                menu.classList.toggle('open');
-            });
-        }
-    });
-    </script>
 
     {% block extra_js %}{% endblock %}
 </body>

@@ -1,155 +1,248 @@
 /**
- * PakAgri — Main JavaScript
- * Handles: nav scroll effects, card hover enhancements, image previews,
- * flash message auto-dismiss, and utility helpers.
+ * FasalRehbar AI — Master Client Interaction Script
+ * Handles: Drag & Drop upload, file picker trigger, Grad-CAM toggle,
+ * animated stage loaders, tab switches, and Chart.js analytics.
  */
 
 'use strict';
 
-// ── DOM Ready ────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ── Navbar scroll shadow ─────────────────────────────────
+    // ── 1. Navbar Scroll Shadow Effect ───────────────────────
     const nav = document.getElementById('mainNav');
     if (nav) {
         const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 20);
         window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll(); // run once on load
+        onScroll();
     }
 
-    // ── Mobile nav toggle ────────────────────────────────────
-    const toggle = document.getElementById('navToggle');
-    const menu = document.getElementById('navMenu');
-    if (toggle && menu) {
-        toggle.addEventListener('click', () => {
-            toggle.classList.toggle('open');
-            menu.classList.toggle('open');
+    // ── 2. Mobile Navigation Drawer ───────────────────────────
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.getElementById('navMenu');
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('open');
         });
-        // Close menu when a link is clicked
-        menu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                toggle.classList.remove('open');
-                menu.classList.remove('open');
-            });
-        });
-        // Close menu on outside click
-        document.addEventListener('click', e => {
+        document.addEventListener('click', (e) => {
             if (!nav.contains(e.target)) {
-                toggle.classList.remove('open');
-                menu.classList.remove('open');
+                navMenu.classList.remove('open');
             }
         });
     }
 
-    // ── Flash message auto-dismiss ───────────────────────────
-    const flashMessages = document.querySelectorAll('.flash-message');
+    // ── 3. Flash Messages Auto-Dismiss ────────────────────────
+    const flashMessages = document.querySelectorAll('.flash-message, .alert-dismissible');
     flashMessages.forEach((el, i) => {
         setTimeout(() => {
             el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
             el.style.opacity = '0';
-            el.style.transform = 'translateX(16px)';
+            el.style.transform = 'translateY(-10px)';
             setTimeout(() => el.remove(), 400);
-        }, 4000 + i * 200);
+        }, 4500 + i * 200);
     });
 
-    // ── Confidence bar animation ─────────────────────────────
-    const confBars = document.querySelectorAll('.confidence-bar-fill[data-target]');
-    if (confBars.length > 0) {
-        const animateBars = () => {
-            confBars.forEach(bar => {
-                const rect = bar.getBoundingClientRect();
-                if (rect.top < window.innerHeight) {
-                    bar.style.width = bar.dataset.target + '%';
-                }
+    // ── 4. Drag & Drop + Click File Upload with Instant Preview ─
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('id_image');
+    const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImage');
+    const previewInfo = document.getElementById('previewInfo');
+    const uploadActions = document.getElementById('uploadActions');
+    const clearBtn = document.getElementById('clearBtn');
+    const uploadForm = document.getElementById('uploadForm');
+
+    if (dropZone && fileInput) {
+        // Direct click on dropzone opens native file picker
+        dropZone.addEventListener('click', (e) => {
+            // Prevent double-trigger if clicking label or clear button
+            if (e.target.id !== 'clearBtn' && !e.target.closest('#uploadActions')) {
+                fileInput.click();
+            }
+        });
+
+        // Keyboard accessible trigger
+        dropZone.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                fileInput.click();
+            }
+        });
+
+        // Drag & drop listeners
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.add('dragover');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.remove('dragover');
+            }, false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files && files.length > 0) {
+                fileInput.files = files;
+                handleFileSelect(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', function () {
+            if (this.files && this.files.length > 0) {
+                handleFileSelect(this.files[0]);
+            }
+        });
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                resetUploadZone();
             });
-        };
-        window.addEventListener('scroll', animateBars, { passive: true });
-        setTimeout(animateBars, 400);
+        }
     }
 
-    // ── Recent scan card hover image zoom ────────────────────
-    document.querySelectorAll('.card img').forEach(img => {
-        const card = img.closest('.card');
-        if (card) {
-            card.addEventListener('mouseenter', () => { img.style.transform = 'scale(1.05)'; });
-            card.addEventListener('mouseleave', () => { img.style.transform = 'scale(1)'; });
+    function handleFileSelect(file) {
+        if (!file.type.match('image.*')) {
+            alert('Please select a valid image file (JPG, PNG, WebP).');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            if (previewImg) previewImg.src = e.target.result;
+            if (uploadPlaceholder) uploadPlaceholder.style.display = 'none';
+            if (imagePreview) imagePreview.style.display = 'block';
+            if (uploadActions) uploadActions.style.display = 'block';
+
+            const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+            if (previewInfo) {
+                previewInfo.innerHTML = `<strong>${file.name}</strong> (${sizeMb} MB) — Ready for analysis`;
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function resetUploadZone() {
+        if (fileInput) fileInput.value = '';
+        if (previewImg) previewImg.src = '';
+        if (imagePreview) imagePreview.style.display = 'none';
+        if (uploadActions) uploadActions.style.display = 'none';
+        if (uploadPlaceholder) uploadPlaceholder.style.display = 'block';
+    }
+
+    // ── 5. Multi-Stage Animated Loading on Submit ──────────────
+    if (uploadForm) {
+        uploadForm.addEventListener('submit', function () {
+            showPakAgriLoading();
+        });
+    }
+
+    // ── 6. Image View Mode Toggle (Original vs Grad-CAM) ───────
+    const viewBtns = document.querySelectorAll('.btn-view-mode[data-mode]');
+    const originalImg = document.getElementById('viewOriginalImg');
+    const gradcamImg = document.getElementById('viewGradcamImg');
+
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            const mode = this.dataset.mode;
+            viewBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            if (mode === 'gradcam' && gradcamImg) {
+                if (originalImg) originalImg.style.display = 'none';
+                gradcamImg.style.display = 'block';
+            } else {
+                if (gradcamImg) gradcamImg.style.display = 'none';
+                if (originalImg) originalImg.style.display = 'block';
+            }
+        });
+    });
+
+    // ── 7. Recommendation Tab Switching ──────────────────────
+    const tabBtns = document.querySelectorAll('.rec-tab-btn[data-tab]');
+    const tabPanes = document.querySelectorAll('.rec-tab-pane');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            const target = this.dataset.tab;
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabPanes.forEach(p => p.style.display = 'none');
+
+            this.classList.add('active');
+            const activePane = document.getElementById('tab-' + target);
+            if (activePane) activePane.style.display = 'block';
+        });
+    });
+
+    // ── 8. Interactive Checklist Toggle ───────────────────────
+    const checkItems = document.querySelectorAll('.checklist-item');
+    checkItems.forEach(item => {
+        item.addEventListener('click', function () {
+            this.classList.toggle('completed');
+            const icon = this.querySelector('.check-icon');
+            if (icon) {
+                if (this.classList.contains('completed')) {
+                    icon.className = 'fas fa-check-circle check-icon text-success';
+                } else {
+                    icon.className = 'far fa-circle check-icon';
+                }
+            }
+        });
+    });
+
+    // ── 9. Circular Gauge Initializer ────────────────────────
+    const gauges = document.querySelectorAll('.circular-gauge-svg[data-progress]');
+    gauges.forEach(gauge => {
+        const progress = parseFloat(gauge.dataset.progress) || 0;
+        const circle = gauge.querySelector('.gauge-progress');
+        if (circle) {
+            const radius = circle.r.baseVal.value;
+            const circumference = 2 * Math.PI * radius;
+            circle.style.strokeDasharray = `${circumference} ${circumference}`;
+            const offset = circumference - (progress / 100) * circumference;
+            setTimeout(() => {
+                circle.style.strokeDashoffset = offset;
+            }, 300);
         }
     });
 
-    // ── Fade-in on scroll (Intersection Observer) ────────────
-    const fadeEls = document.querySelectorAll('.fade-in');
-    if (fadeEls.length > 0 && 'IntersectionObserver' in window) {
-        const io = new IntersectionObserver(entries => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    e.target.style.opacity = '1';
-                    e.target.style.transform = 'translateY(0)';
-                    io.unobserve(e.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        fadeEls.forEach((el, i) => {
-            // Only animate elements that are not already in the viewport
-            const rect = el.getBoundingClientRect();
-            if (rect.top > window.innerHeight) {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(24px)';
-                el.style.transition = `opacity 0.5s ease ${i * 0.08}s, transform 0.5s ease ${i * 0.08}s`;
-                io.observe(el);
-            }
-        });
-    }
-
-    // ── Tab switching (recommendation page) ─────────────────
-    const tabBtns = document.querySelectorAll('.tab-btn[data-tab]');
-    if (tabBtns.length) {
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', function () {
-                const target = this.dataset.tab;
-                document.querySelectorAll('.tab-btn[data-tab]').forEach(b => {
-                    b.classList.remove('active');
-                    b.setAttribute('aria-selected', 'false');
-                });
-                document.querySelectorAll('.advice-section, .tab-pane').forEach(s => s.classList.remove('active'));
-                this.classList.add('active');
-                this.setAttribute('aria-selected', 'true');
-                const section = document.getElementById('tab-' + target);
-                if (section) section.classList.add('active');
-            });
-        });
-    }
 });
 
-// ── Global loading overlay helper ────────────────────────────
-// Called from detection/index.html when form is submitted.
-function showPakAgriLoading(message, submessage) {
+// Global Loading Animation Sequence
+function showPakAgriLoading() {
     const overlay = document.getElementById('pakagri-loading-overlay');
     if (!overlay) return;
 
-    const msgEl = document.getElementById('pakagri-loading-message');
-    const subEl = document.getElementById('pakagri-loading-submessage');
-
-    if (message && msgEl) msgEl.textContent = message;
-    if (subEl) subEl.textContent = submessage || '';
-
     overlay.classList.add('active');
 
-    // Cycle through loading steps
-    const stepIds = ['step1', 'step2', 'step3', 'step4'];
+    const steps = [
+        document.getElementById('loadingStep1'),
+        document.getElementById('loadingStep2'),
+        document.getElementById('loadingStep3'),
+        document.getElementById('loadingStep4')
+    ];
+
     let current = 0;
-
-    const tick = () => {
-        stepIds.forEach((id, idx) => {
-            const el = document.getElementById(id);
-            if (!el) return;
-            el.classList.remove('active', 'done');
-            if (idx < current) el.classList.add('done');
-            else if (idx === current) el.classList.add('active');
-        });
+    const interval = setInterval(() => {
+        if (steps[current]) {
+            steps[current].classList.add('done');
+            steps[current].classList.remove('active');
+        }
         current++;
-        if (current < stepIds.length) setTimeout(tick, 2000);
-    };
-
-    tick();
+        if (steps[current]) {
+            steps[current].classList.add('active');
+        }
+        if (current >= steps.length) {
+            clearInterval(interval);
+        }
+    }, 1200);
 }

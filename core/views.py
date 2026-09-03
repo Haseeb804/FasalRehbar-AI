@@ -83,3 +83,53 @@ class FeedbackView(FormView):
 
 def custom_404(request, exception=None):
     return render(request, "core/404.html", status=404)
+
+
+def set_language_view(request):
+    """
+    Robust language switcher handling prefix_default_language=False.
+    Redirects between /... and /ur/... cleanly while preserving the exact query/path.
+    """
+    import urllib.parse
+    from django.conf import settings
+    from django.http import HttpResponseRedirect
+    from django.utils import translation
+
+    lang_code = request.POST.get("language") or request.GET.get("language") or "en"
+    if lang_code not in ("en", "ur"):
+        lang_code = "en"
+
+    translation.activate(lang_code)
+
+    next_url = request.POST.get("next") or request.GET.get("next") or request.META.get("HTTP_REFERER") or "/"
+    parsed = urllib.parse.urlparse(next_url)
+    path = parsed.path or "/"
+
+    if lang_code == "ur":
+        if not path.startswith("/ur/") and path != "/ur":
+            path = "/ur" + (path if path.startswith("/") else "/" + path)
+    else:  # "en"
+        if path.startswith("/ur/"):
+            path = path[3:]
+        elif path == "/ur":
+            path = "/"
+
+    redirect_url = urllib.parse.urlunparse((
+        parsed.scheme, parsed.netloc, path, parsed.params, parsed.query, parsed.fragment
+    ))
+
+    response = HttpResponseRedirect(redirect_url or "/")
+    response.set_cookie(
+        settings.LANGUAGE_COOKIE_NAME,
+        lang_code,
+        max_age=settings.LANGUAGE_COOKIE_AGE,
+        path=settings.LANGUAGE_COOKIE_PATH,
+        domain=settings.LANGUAGE_COOKIE_DOMAIN,
+        secure=settings.LANGUAGE_COOKIE_SECURE,
+        httponly=settings.LANGUAGE_COOKIE_HTTPONLY,
+        samesite=settings.LANGUAGE_COOKIE_SAMESITE,
+    )
+    if hasattr(request, "session"):
+        session_key = getattr(translation, "LANGUAGE_SESSION_KEY", "_language")
+        request.session[session_key] = lang_code
+    return response

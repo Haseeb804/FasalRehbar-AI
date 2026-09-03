@@ -90,6 +90,7 @@ LANGUAGES = [
     ("ur", "اردو"),
 ]
 LOCALE_PATHS = [BASE_DIR / "locale"]
+DEFAULT_CHARSET = "utf-8"
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -108,9 +109,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "auth.User"
 
-LOGIN_URL = "account_login"
+LOGIN_URL = "accounts:account_login"
 LOGIN_REDIRECT_URL = "dashboard:index"
-LOGOUT_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "core:home"
 
 EMAIL_BACKEND = env("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="no-reply@pakagri.local")
@@ -131,9 +132,14 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 
 # ── ML model weights ────────────────────────────────────────────────────────
-# Place the checkpoints trained in the KisanBid Colab notebooks here. See
-# ml_models/README.md for the exact expected file layout and names.
-ML_MODELS_DIR = env("ML_MODELS_DIR", default=str(BASE_DIR / "ml_models"))
+_configured_ml_dir = env("ML_MODELS_DIR", default="")
+if _configured_ml_dir and Path(_configured_ml_dir).exists():
+    ML_MODELS_DIR = _configured_ml_dir
+elif (BASE_DIR / "saved_models").exists():
+    ML_MODELS_DIR = str(BASE_DIR / "saved_models")
+else:
+    ML_MODELS_DIR = str(BASE_DIR / "ml_models")
+
 ML_DEVICE = env("ML_DEVICE", default="cpu")  # "cpu" or "cuda" if a GPU is available on the server
 ML_IMG_SIZE = env.int("ML_IMG_SIZE", default=224)
 # When both EfficientNet-B0 and YOLOv8s-cls top predictions disagree, the

@@ -1,44 +1,218 @@
 {% extends "base/base.html" %}
+{% load static i18n %}
 
-{% block title %}About - FasalRehbar AI{% endblock %}
+{% block title %}{% trans "About FasalRehbar AI" %} — Precision Agriculture Intelligence{% endblock %}
 
 {% block content %}
-<section class="container-lg section-padding">
-    <h1 class="section-title mb-5">About <span class="highlight">FasalRehbar AI</span></h1>
+<!-- ══════════════════════════════════════════════════════════════
+     1. HERO HEADER WITH BACKDROP & VISUALS
+══════════════════════════════════════════════════════════════ -->
+<section class="hero-master" style="padding: 4.5rem 0 5rem;">
+    <img src="{% static 'images/hero_agri_bg.jpg' %}" alt="FasalRehbar Agriculture" class="hero-backdrop-img">
+    <div class="hero-overlay-gradient"></div>
 
-    <div class="row g-5 align-items-center mb-5">
-        <div class="col-md-6">
-            <h2>Our Mission</h2>
-            <p class="lead">
-                To empower Pakistani farmers with advanced technology for crop disease detection and protection.
-            </p>
-            <p>
-                We believe that every farmer deserves access to modern agricultural technology. FasalRehbar AI combines artificial intelligence 
-                with agricultural expertise to provide instant disease detection and expert recommendations.
-            </p>
-        </div>
-        <div class="col-md-6">
-            <img src="https://images.pexels.com/photos/2132227/pexels-photo-2132227.jpeg?auto=compress&cs=tinysrgb&w=1000" class="img-fluid rounded" style="object-fit: cover; height: 400px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.1);" alt="Mission">
+    <div class="container-lg position-relative z-2">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <div class="hero-pill-badge mb-3">
+                    <i class="fas fa-shield-halved text-emerald-300"></i>
+                    <span>{% trans "Empowering Pakistan's Farmers with AI" %}</span>
+                </div>
+                <h1 class="hero-title mb-3">
+                    {% trans "Advancing Precision Crop Protection Across Pakistan" %}
+                </h1>
+                <p class="hero-subtitle mb-4">
+                    {% trans "FasalRehbar AI bridges state-of-the-art computer vision and verified agricultural research to safeguard national food security, prevent disease outbreaks, and boost farm profitability." %}
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'detection:index' %}" class="btn-hero-primary">
+                        <i class="fas fa-camera"></i> {% trans "Scan Your Crop Leaf" %}
+                    </a>
+                    <a href="{% url 'core:services' %}" class="btn-hero-secondary">
+                        <i class="fas fa-microchip"></i> {% trans "Explore AI Capabilities" %}
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="hero-hud-card">
+                    <div class="hud-header">
+                        <span class="small fw-bold text-white text-uppercase tracking-wider">
+                            <i class="fas fa-chart-pie text-emerald-400 me-2"></i>{% trans "Diagnostic Scope" %}
+                        </span>
+                        <span class="badge bg-success-subtle text-success small">{% trans "Active Production" %}</span>
+                    </div>
+                    <div class="d-flex flex-column gap-3">
+                        <div class="hud-step-row">
+                            <div class="hud-step-icon crop">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div>
+                                <div class="small text-white opacity-75">{% trans "Major Target Crops" %}</div>
+                                <div class="fw-bold text-white fs-6">🧅 Onion · 🥭 Mango · 🌱 Sugarcane</div>
+                            </div>
+                        </div>
+                        <div class="hud-step-row">
+                            <div class="hud-step-icon disease">
+                                <i class="fas fa-shield-virus"></i>
+                            </div>
+                            <div>
+                                <div class="small text-white opacity-75">{% trans "Neural Vision Models" %}</div>
+                                <div class="fw-bold text-white fs-6">29 Pathogen & Foliar Disease Classes</div>
+                            </div>
+                        </div>
+                        <div class="hud-step-row" style="margin-bottom: 0;">
+                            <div class="hud-step-icon ai">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <div>
+                                <div class="small text-white opacity-75">{% trans "Scientific Evidence" %}</div>
+                                <div class="fw-bold text-white fs-6">PARC · UAF · FAO Advisory Standards</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</section>
 
-    <hr class="my-5">
-
-    <div class="row g-5 align-items-center mb-5">
-        <div class="col-md-6">
-            <img src="https://images.pexels.com/photos/2886937/pexels-photo-2886937.jpeg?auto=compress&cs=tinysrgb&w=1000" class="img-fluid rounded" style="object-fit: cover; height: 400px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.1);" alt="Vision">
+<!-- ══════════════════════════════════════════════════════════════
+     2. MISSION & THREE CORE PILLARS
+══════════════════════════════════════════════════════════════ -->
+<section style="padding: 5.5rem 0; background: var(--white);">
+    <div class="container-lg">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-bold text-uppercase">
+                <i class="fas fa-lightbulb me-1"></i> {% trans "Core Technology Pillars" %}
+            </span>
+            <h2 class="display-6 fw-bold text-slate-900 mt-2 mb-3">
+                {% trans "Three-Stage Neural & Grounded Workflow" %}
+            </h2>
+            <p class="text-muted" style="line-height: 1.8;">
+                {% trans "FasalRehbar AI replaces unverified chemical guesswork with a transparent 3-stage intelligence pipeline built for accuracy, reliability, and farmer trust." %}
+            </p>
         </div>
-        <div class="col-md-6">
-            <h2>Our Vision</h2>
-            <p class="lead">
-                A future where every crop is protected and every farmer has access to cutting-edge disease detection.
-            </p>
-            <p>
-                By 2030, we aim to be the leading agricultural disease detection platform in South Asia, helping millions of farmers 
-                protect their crops and increase yields.
-            </p>
+
+        <div class="row g-4">
+            <!-- Pillar 1 -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="background: var(--slate-50); border: 1px solid var(--border-light) !important;">
+                    <div class="step-icon-box mb-3">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h4 class="fw-bold text-slate-900 mb-2">{% trans "Crop Identification" %}</h4>
+                    <p class="text-muted small mb-0" style="line-height: 1.7;">
+                        {% trans "Instant classification identifies whether the uploaded plant photo is Onion, Mango, or Sugarcane with high reliability." %}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="background: var(--slate-50); border: 1px solid var(--border-light) !important;">
+                    <div class="step-icon-box mb-3" style="background: var(--rose-100); color: var(--rose-600);">
+                        <i class="fas fa-shield-virus"></i>
+                    </div>
+                    <h4 class="fw-bold text-slate-900 mb-2">{% trans "Disease Diagnosis & Heatmaps" %}</h4>
+                    <p class="text-muted small mb-0" style="line-height: 1.7;">
+                        {% trans "Advanced vision scans detect foliar diseases and spotlight exact symptom spots on the leaf for visual confirmation." %}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="background: var(--slate-50); border: 1px solid var(--border-light) !important;">
+                    <div class="step-icon-box mb-3" style="background: var(--violet-100); color: var(--violet-600);">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h4 class="fw-bold text-slate-900 mb-2">{% trans "7-Day Care Advisory" %}</h4>
+                    <p class="text-muted small mb-0" style="line-height: 1.7;">
+                        {% trans "Provides structured 7-day action plans, immediate on-field containment steps, and safe irrigation and nutrient recommendations." %}
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
+</section>
 
+<!-- ══════════════════════════════════════════════════════════════
+     3. VISUAL SHOWCASE OF TARGET CROPS
+══════════════════════════════════════════════════════════════ -->
+<section style="padding: 5rem 0; background: var(--bg-main); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+    <div class="container-lg">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-bold text-uppercase">
+                    <i class="fas fa-wheat-awn me-1"></i> {% trans "Target Crop Coverage" %}
+                </span>
+                <h2 class="display-6 fw-bold text-slate-900 mt-2 mb-3">
+                    {% trans "Tailored for Pakistan's Agricultural Backbone" %}
+                </h2>
+                <p class="text-muted mb-4" style="line-height: 1.8;">
+                    {% trans "Onion, Mango orchards, and Sugarcane are cornerstone crops of Pakistan's economy. Early leaf disease detection prevents devastating crop losses and ensures higher market yield." %}
+                </p>
+
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex align-items-start gap-3 p-3 bg-white rounded-3 shadow-sm border">
+                        <div class="fs-3 text-emerald-600">🧅</div>
+                        <div>
+                            <strong class="text-slate-900 d-block">{% trans "Onion (پیاز)" %}</strong>
+                            <span class="small text-muted">Purple Blotch, Downy Mildew, Stemphylium Blight, Rust, Botrytis.</span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-3 p-3 bg-white rounded-3 shadow-sm border">
+                        <div class="fs-3 text-emerald-600">🥭</div>
+                        <div>
+                            <strong class="text-slate-900 d-block">{% trans "Mango (آم)" %}</strong>
+                            <span class="small text-muted">Anthracnose, Bacterial Canker, Die Back, Gall Midge, Powdery Mildew, Sooty Mould.</span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-3 p-3 bg-white rounded-3 shadow-sm border">
+                        <div class="fs-3 text-emerald-600">🌱</div>
+                        <div>
+                            <strong class="text-slate-900 d-block">{% trans "Sugarcane (گنا)" %}</strong>
+                            <span class="small text-muted">Red Rot, Bacterial Blight, Rust, Mosaic Virus, Yellow Leaf Disease.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="rounded-4 overflow-hidden shadow-sm border mb-3">
+                            <img src="{% static 'images/mango_showcase.jpg' %}" alt="Mango Crop" style="height: 200px; width: 100%; object-fit: cover;">
+                        </div>
+                        <div class="rounded-4 overflow-hidden shadow-sm border">
+                            <img src="{% static 'images/onion_showcase.jpg' %}" alt="Onion Crop" style="height: 200px; width: 100%; object-fit: cover;">
+                        </div>
+                    </div>
+                    <div class="col-6 pt-4">
+                        <div class="rounded-4 overflow-hidden shadow-sm border">
+                            <img src="{% static 'images/sugarcane_showcase.jpg' %}" alt="Sugarcane Crop" style="height: 416px; width: 100%; object-fit: cover;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     4. CALL TO ACTION BANNER
+══════════════════════════════════════════════════════════════ -->
+<section style="padding: 4.5rem 0; background: var(--white);">
+    <div class="container-lg">
+        <div class="p-5 rounded-4 text-center text-white shadow-lg position-relative overflow-hidden" style="background: linear-gradient(135deg, var(--emerald-950) 0%, var(--emerald-800) 50%, var(--emerald-700) 100%);">
+            <h2 class="fw-bold text-white mb-3">{% trans "Ready to Protect Your Crops with AI?" %}</h2>
+            <p class="text-emerald-100 mb-4 max-w-600 mx-auto" style="line-height: 1.8;">
+                {% trans "Upload a leaf photo from your smartphone or computer and get instant diagnostic intelligence." %}
+            </p>
+            <a href="{% url 'detection:index' %}" class="btn btn-hero-primary px-5 py-3">
+                <i class="fas fa-camera me-2"></i> {% trans "Start New Scan Now" %}
+            </a>
+        </div>
+    </div>
 </section>
 {% endblock %}
