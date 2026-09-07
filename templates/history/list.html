@@ -149,7 +149,11 @@
         <!-- Thumbnail -->
         {% if history.prediction.scan_image.image %}
         <img src="{{ history.prediction.scan_image.image.url }}"
-             alt="{% trans 'Crop scan' %}" class="history-thumb">
+             alt="{% trans 'Crop scan' %}" class="history-thumb"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="history-thumb-placeholder" style="display: none;">
+            <i class="fas fa-image"></i>
+        </div>
         {% else %}
         <div class="history-thumb-placeholder">
             <i class="fas fa-image"></i>
@@ -192,7 +196,8 @@
             <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
                 <div class="confidence-bar-wrapper" style="flex: 1; height: 5px;">
                     <div class="confidence-bar-fill {{ history.prediction.confidence_level }}"
-                         style="width: {{ history.prediction.get_confidence_percentage }}%; height: 100%;">
+                         data-pct="{{ history.prediction.get_confidence_percentage }}"
+                         style="height: 100%;">
                     </div>
                 </div>
                 <span style="font-size: 0.78rem; font-weight: 700; color: var(--gray-600); flex-shrink: 0;">
@@ -225,9 +230,10 @@
             </a>
             {% endif %}
             <button type="button"
-                    class="btn btn-outline-secondary btn-sm"
+                    class="btn btn-outline-secondary btn-sm delete-scan-btn"
                     title="{% trans 'Delete' %}"
-                    onclick="confirmDelete({{ history.id }}, '{{ history.prediction.predicted_at|date:'d M Y' }}')">
+                    data-history-id="{{ history.id }}"
+                    data-scan-date="{{ history.prediction.predicted_at|date:'d M Y' }}">
                 <i class="fas fa-trash"></i>
             </button>
         </div>
@@ -332,6 +338,12 @@
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.confidence-bar-fill[data-pct]').forEach(function(el) {
+        el.style.width = (el.getAttribute('data-pct') || 0) + '%';
+    });
+});
+
 function confirmDelete(historyId, dateStr) {
     document.getElementById('deleteForm').action = '/history/' + historyId + '/delete/';
     document.getElementById('deleteModalDate').textContent = dateStr;
@@ -340,9 +352,18 @@ function confirmDelete(historyId, dateStr) {
 function closeDeleteModal() {
     document.getElementById('deleteModal').classList.remove('active');
 }
-document.getElementById('deleteModal').addEventListener('click', function(e) {
-    if (e.target === this) closeDeleteModal();
+
+document.addEventListener('click', function(e) {
+    const deleteBtn = e.target.closest('.delete-scan-btn');
+    if (deleteBtn) {
+        confirmDelete(deleteBtn.dataset.historyId, deleteBtn.dataset.scanDate);
+        return;
+    }
+    if (e.target === document.getElementById('deleteModal')) {
+        closeDeleteModal();
+    }
 });
+
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeDeleteModal();
 });
